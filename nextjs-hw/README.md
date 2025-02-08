@@ -37,3 +37,9 @@ Routing is like giving directions to a website. When you type a web address (URL
 - Link is a component provided by Next.js that allows you to create links to navigate between pages in your application.
 - It's primarily used for declarative, client-side navigation. When you click on a link created with **Link**, it prevents the default browser full-page refresh and fetches the new page content on the client slide, resulting in a faster and smoother user experience.
 - It's typically used in your component's JSX code to create clickable links that lead to other pages eithin your Next.js application.
+
+### useRouter()
+
+- useRouter is a hook provided by Next.js that allows you to access the router object and its properties within your component.
+- It provides programmatic control over the router and allows you to navigate to different pages or perform other routing-related actions in response to user interactions or events within your component.
+- It's useful when you need to handle navigation or access route- specific information directly in your component logic.
