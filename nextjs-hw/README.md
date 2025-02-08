@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -18,19 +16,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Learning Documentation
 
-## Learn More
+### What is Next.js ?
 
-To learn more about Next.js, take a look at the following resources:
+Next.js is an open-source JavaScript framework that is build on **top of React**, a popular JavaScript library for building user interfaces. It is designed to make it easier to create **server-rendered** React applications with a focus on developer productivity, performance, and SEO. Next.js provides a set of tools and conventions that simplify various aspects of building web applications.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Server-side rendering (SSR)**: Next.js allows you to render React components on the server sider before sending then to the client. This can imporve page load times and SEO, as search engines can easily index the content.
+- **Static site generation (SSG)**: Next.js also supports static site generation, where you can pre-render pages at build time. This approach is great for content-heavy websites and can offer even better performance and SEO benfits.
+- **API routes**: It offers a built-in API route feature that allows you to create serverless API endpoints within your Next.js project, making it easy to handle backend logic.
 
-## Deploy on Vercel
+### Routing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Routing is like giving directions to a website. When you type a web address (URL) into your browser, routing tells the website which page or thing to show you. It's like a map that guides the website to the right place when you click a link or enter a web address. So, routing hepls the website know what to display based on what you're looking for.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Link
+
+- Link is a component provided by Next.js that allows you to create links to navigate between pages in your application.
+- It's primarily used for declarative, client-side navigation. When you click on a link created with **Link**, it prevents the default browser full-page refresh and fetches the new page content on the client slide, resulting in a faster and smoother user experience.
+- It's typically used in your component's JSX code to create clickable links that lead to other pages eithin your Next.js application.
