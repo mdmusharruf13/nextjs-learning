@@ -97,3 +97,29 @@ Client Components allows you to write interactive UI that can be rendered on the
 ### Layout
 
 A Layout is like a _blueprint_ that helps you make all the pages of your website look the same. It's way to put common things, header, footer, and other stuff that appears on other page, in one place. This makes it easy to keep a similar look on all your web pages. So, a layout is a handy tool that lets you keep things _tidy and consistent_ on your website.
+
+### client side
+
+Next.js follows folder based routing, folder name act as a route and folder must have **page.js** file which will be served to the user. It doesn't matter how many files that folder contains it only server the page.js file to the user.
+
+```
+app/
+|--about/
+|  |--page.js
+|--contact/
+|  |--page.jsx
+|  |--loading.js
+```
+
+### server side
+
+Next.js consider folder as route, where each folder represents an endpoint and it must have **route.js** name file which will be acting as an end-point. Here methods like **GET, POST, PUT, DELETE** are defined inside the route.js file.
+
+```
+app/
+|--api/
+|  |--users/
+|  |  |--route.js
+|  |--data/
+|  |  |--route.js
+```
