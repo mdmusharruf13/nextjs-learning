@@ -58,3 +58,7 @@ Examples:
 url/login
 url/signin
 ```
+
+### Dynamic Routes
+
+Dynamic routes in Next.js refer to a **feature** that allows you to create web pages with variable or dynamic parts in the URL. Instead of defining individual routes for every possible URL, you can create a single **route pattern** that matches a variety of dynamic values. This is extremely useful when you have pages that share a common structure but differ based on specific information in the URL.
