@@ -62,3 +62,7 @@ url/signin
 ### Dynamic Routes
 
 Dynamic routes in Next.js refer to a **feature** that allows you to create web pages with variable or dynamic parts in the URL. Instead of defining individual routes for every possible URL, you can create a single **route pattern** that matches a variety of dynamic values. This is extremely useful when you have pages that share a common structure but differ based on specific information in the URL.
+
+### Catch-All Routes
+
+In Next.js, the **[...foldername]** notation indicates that you are using a catch-all route, which allows you to capture multiple URL segments and treat them as a dynamic array of values. This is useful when you want to create dynamic routes that can handle varying numbers of URL segments.
