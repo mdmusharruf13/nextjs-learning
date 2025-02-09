@@ -70,3 +70,26 @@ In Next.js, the **[...foldername]** notation indicates that you are using a catc
 ### redirect
 
 The **redirect** function allows you to redirect the user to another URL. _redirect_ can be used in Server Components, Client Components, Route Handlers, and Server Actions.
+
+### Server Components
+
+React Server Components allows you to write UI that can be rendered and optionally cached on the server. By default, Next.js uses Server Components. This allows you to automatically implement server rendering with no additional configuration, and you can opt into using Client Components when needed.
+
+### benfits of Server rendering
+
+- Data Fetching
+- Security
+- Caching
+- Bundle Sizes
+- Initial Page Load and First Contentful Paint
+- Search Engine Optimization and Social Network Shareability
+- Streaming Server
+
+### Client Components
+
+Client Components allows you to write interactive UI that can be rendered on the client at request time. In Next.js client rendering is _opt-in_, meaning you have to explicitly decide what components React should render on the client. To use Client Component, you can add the React **"use client"** directive at the top of a file, above your imports.
+
+### Benefits of Client Rendering
+
+- Interactivity
+- Browser APIs
