@@ -1,7 +1,14 @@
-function page() {
+function Users() {
     return (
-        <div>Thsi is users page</div>
+        <div>This is users page</div>
     )
 }
 
-export default page
+export default Users
+
+export const metadata = () => {
+    return {
+        title: "This is user page",
+        description: "All about the user"
+    };
+};

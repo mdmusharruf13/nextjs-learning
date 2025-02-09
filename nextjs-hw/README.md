@@ -93,3 +93,7 @@ Client Components allows you to write interactive UI that can be rendered on the
 
 - Interactivity
 - Browser APIs
+
+### Layout
+
+A Layout is like a _blueprint_ that helps you make all the pages of your website look the same. It's way to put common things, header, footer, and other stuff that appears on other page, in one place. This makes it easy to keep a similar look on all your web pages. So, a layout is a handy tool that lets you keep things _tidy and consistent_ on your website.
