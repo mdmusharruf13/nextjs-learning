@@ -66,3 +66,7 @@ Dynamic routes in Next.js refer to a **feature** that allows you to create web p
 ### Catch-All Routes
 
 In Next.js, the **[...foldername]** notation indicates that you are using a catch-all route, which allows you to capture multiple URL segments and treat them as a dynamic array of values. This is useful when you want to create dynamic routes that can handle varying numbers of URL segments.
+
+### redirect
+
+The **redirect** function allows you to redirect the user to another URL. _redirect_ can be used in Server Components, Client Components, Route Handlers, and Server Actions.
