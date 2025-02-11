@@ -123,3 +123,11 @@ app/
 |  |--data/
 |  |  |--route.js
 ```
+
+### Middleware(s)
+
+In Next.js, middleware's are functions or pieces of code that runs in between a user request to a web page and server response. They help you to process and modify the request or response, adding **extra functionality** to your web application.
+
+Use the file middleware.js in the root of your project to define Middleware. For example, at the same level as _pages_ or _app_ or inside _src_ if applicable.
+
+**Note :** While only one middleware.js file is supported per project, you can still organize your middleware logic modularly. Break out middleware functionalities into seperate .js or .ts files and import them into your main middleware.js file.
