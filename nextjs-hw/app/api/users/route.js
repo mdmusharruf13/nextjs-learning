@@ -5,11 +5,17 @@ export function GET() {
 }
 
 export async function POST(req, res) {
-    let { email, password } = await req.json();
-    console.log(email, password);
-    if (!email || !password) {
-        return NextResponse.json({ error: "required field not found" }, { status: 400 })
+    let { name, email, password } = await req.json();
+    console.log(name, email, password);
+    if (!name || !email || !password) {
+        return NextResponse.json(
+            { error: "required field not found", ok: false },
+            { status: 400 }
+        )
     }
 
-    return NextResponse.json({ res: 'Credentials verified, user successfully logged In' });
+    return NextResponse.json(
+        { res: 'Credentials verified, user logged In', ok: true },
+        { status: 201 }
+    );
 }
