@@ -15,8 +15,4 @@ export const links = [
         title: "Blog",
         path: "/blog"
     },
-    {
-        title: "Login",
-        path: "/login"
-    },
 ]
