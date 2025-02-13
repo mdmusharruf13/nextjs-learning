@@ -2,17 +2,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 4rem;
+  margin-block: 2rem;
 }
 
+.imgContainer {
+  flex: 1;
+}
 .formContainer {
-  margin: 4rem;
-  width: 40%;
+  width: 70%;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .form input,
@@ -33,4 +38,10 @@
   border-width: none;
   outline: none;
   border-radius: 5px;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
 }

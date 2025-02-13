@@ -13,11 +13,14 @@
   object-fit: cover;
 }
 
-.date {
+.dateContainer {
   transform: rotate(270deg);
-  position: relative;
-  right: 15px;
   margin: auto;
+}
+.date {
+  /* margin: auto; */
+  /* width: max-content; */
+  white-space: nowrap;
 }
 
 .title {

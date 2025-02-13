@@ -1,6 +1,8 @@
 .container {
   display: flex;
   gap: 2rem;
+  margin-block: 2rem;
+  align-items: center;
 }
 
 .imgContainer {
@@ -46,4 +48,10 @@
 .description {
   font-size: 18px;
   line-height: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
 }

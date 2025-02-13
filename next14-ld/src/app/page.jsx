@@ -3,7 +3,7 @@ import "../utils/classes.css";
 
 export default function Home() {
   return (
-    <section className="flex">
+    <section className="homeContainer">
       <section className="flex flex-col gap-4">
         <section>
           <p className="heading-lg">Creative Thoughts Agency.</p>
@@ -21,12 +21,13 @@ export default function Home() {
           </section>
         </section>
       </section>
-      <section>
+      <section className="imageContainer">
         <Image
           src={"/creativity.gif"}
           alt="gif image"
           width={700}
           height={500}
+          className="img"
         />
       </section>
     </section>

@@ -17,7 +17,9 @@ export default function PostCard() {
             className={styles.img}
           />
         </section>
-        <span className={styles.date}>Feb 13 2025</span>
+        <section className={styles.dateContainer}>
+          <span className={styles.date}>Feb 13 2025</span>
+        </section>
       </section>
       <section className={styles.infoContainer}>
         <p className={styles.title}>title</p>
