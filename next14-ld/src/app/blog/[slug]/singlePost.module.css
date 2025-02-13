@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  gap: 2rem;
+}
+
+.imgContainer {
+  flex: 1;
+}
+
+.img {
+  height: calc(100vh - 200px);
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 2;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.postData {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.avatar {
+  border: 0px;
+  border-radius: 50%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subHeading {
+  font-weight: 600;
+  color: grey;
+}
+.description {
+  font-size: 18px;
+  line-height: 1.5rem;
+}
