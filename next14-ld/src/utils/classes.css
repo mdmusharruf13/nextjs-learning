@@ -39,3 +39,7 @@
 .text-white {
   color: white;
 }
+
+.mb-2 {
+  margin-bottom: 2rem;
+}

@@ -1,22 +1,43 @@
 import Image from "next/image";
+import styles from "./about.module.css";
 
 export default function about() {
   return (
-    <section>
-      <Image
-        src={"/introImage.png"}
-        alt="about image"
-        width={500}
-        height={500}
-      />
-      <Image
-        src={
-          "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnJvbnQlMjBlbmQlMjBkZXZlbG9wZXJ8ZW58MHx8MHx8fDA%3D"
-        }
-        alt="coding image"
-        width={500}
-        height={500}
-      />
+    <section className={styles.container}>
+      <section className={styles.textContainer}>
+        <p className={styles.title}>About Agency</p>
+        <p className={styles.heading}>
+          We create digital ideas that are bigger, bolder braver and better.
+        </p>
+        <p>
+          We create digital ideas that are bigger, bolder, braver and better. We
+          believe in good ideas flexibility and precision. We're world's Our
+          Special Team best consulting solution provider. Wide range of web and
+          software development services.
+        </p>
+        <section className={styles.infoContainer}>
+          <section className={styles.info}>
+            <p className={styles.number}>10 K+</p>
+            <p>Years of experience</p>
+          </section>
+          <section className={styles.info}>
+            <p className={styles.number}>234 K+</p>
+            <p>People reached</p>
+          </section>
+          <section className={styles.info}>
+            <p className={styles.number}>10 K+</p>
+            <p>Years of experience</p>
+          </section>
+        </section>
+      </section>
+      <section>
+        <Image
+          src={"/introImage.png"}
+          alt="about image"
+          width={500}
+          height={500}
+        />
+      </section>
     </section>
   );
 }
