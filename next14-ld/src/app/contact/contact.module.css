@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formContainer {
+  margin: 4rem;
+  width: 40%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form input,
+.form textarea {
+  background-color: var(--bgSoft);
+  color: var(--textSoft);
+  padding: 13px;
+  border-width: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+.btn {
+  background-color: var(--btn);
+  color: var(--text);
+  cursor: pointer;
+  padding: 7px 13px;
+  border-width: none;
+  outline: none;
+  border-radius: 5px;
+}
