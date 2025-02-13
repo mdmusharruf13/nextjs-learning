@@ -1,0 +1,41 @@
+.flex {
+  display: flex;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.flex-col {
+  flex-direction: column;
+}
+.btn-sm {
+  padding: 8px 16px;
+  border-width: 0px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.gap-1 {
+  gap: 1rem;
+}
+.gap-2 {
+  gap: 2rem;
+}
+.gap-4 {
+  gap: 4rem;
+}
+.heading-lg {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.bg-blue {
+  background-color: rgb(21, 84, 209);
+}
+.text-white {
+  color: white;
+}

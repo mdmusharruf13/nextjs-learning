@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <div className={styles.container}>
-      <section className={styles.logo}>Logo</section>
+      <section className={styles.logo}>musharruf</section>
       <section className={`${styles.links} ${show ? styles.show : ""}`}>
         {links.map((link) => (
           <Link
