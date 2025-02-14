@@ -39,3 +39,7 @@ Hydration failed because the server rendered HTML didn't match the client. As a 
 - Invalid HTML tag nesting.
 
 It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+### dynamic()
+
+This function lets you dynamically import a component. It uses React.lazy() with Suspense under the hood.

@@ -2,18 +2,14 @@
 
 import Image from "next/image";
 import "../utils/classes.css";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const HydrationTestNoSSR = dynamic(() => import("@/components/HydrationTest"), {
+  ssr: false,
+});
 
 export default function Home() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  let num = Math.random();
-  console.log(num);
-
+  const num = Math.random();
   return (
     <section className="homeContainer">
       <section className="flex flex-col gap-4">
@@ -22,10 +18,12 @@ export default function Home() {
         </section>
         <section className="flex flex-col gap-2">
           <p>
-            {isClient && num}Lorem ipsum, dolor sit amet consectetur adipisicing
-            elit. Neque voluptatem et ipsa dicta doloribus sit deserunt.
-            Molestiae porro sequi labore, explicabo accusamus consequatur
-            molestias laudantium mollitia ullam voluptatibus ab commodi.
+            <HydrationTestNoSSR />
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Neque
+            voluptatem et ipsa dicta doloribus sit deserunt. Molestiae porro
+            sequi labore, explicabo accusamus consequatur molestias laudantium
+            mollitia ullam voluptatibus ab commodi.
+            <span suppressHydrationWarning>{num}</span>
           </p>
           <section className="flex gap-1">
             <button className="btn-sm bg-blue text-white">Learn More</button>
