@@ -1,7 +1,10 @@
+import { use } from "react";
 import styles from "./singlePost.module.css";
 import Image from "next/image";
 
-export default function SinglePostPage() {
+export default function SinglePostPage({ params }) {
+  const resolvedParams = use(params);
+  console.log(resolvedParams);
   return (
     <section className={styles.container}>
       <section className={styles.imgContainer}>
