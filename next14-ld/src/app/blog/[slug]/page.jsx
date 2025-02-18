@@ -1,6 +1,6 @@
-import { use } from "react";
 import styles from "./singlePost.module.css";
 import Image from "next/image";
+import { getPost, getUser } from "@/utils/data";
 
 const getData = async (id) => {
   const response = await fetch(
@@ -17,8 +17,11 @@ const getData = async (id) => {
 export default async function SinglePostPage({ params }) {
   const { slug } = await params;
 
-  const post = await getData(slug);
-  console.log(post);
+  // const post = await getData(slug);
+  const [post] = await getPost({ slug: slug });
+
+  const [user] = await getUser(post.userId);
+
   return (
     <section className={styles.container}>
       <section className={styles.imgContainer}>
@@ -44,7 +47,7 @@ export default async function SinglePostPage({ params }) {
           </section>
           <section className={styles.info}>
             <p className={styles.subHeading}>Author</p>
-            <p className={styles.text}>Musharruf</p>
+            <p className={styles.text}>{user.username}</p>
           </section>
           <section className={styles.info}>
             <p className={styles.subHeading}>Published</p>
@@ -52,7 +55,7 @@ export default async function SinglePostPage({ params }) {
           </section>
         </section>
         <section className={styles.description}>
-          <p>{post.body}</p>
+          <p>{post.description}</p>
         </section>
       </section>
     </section>
