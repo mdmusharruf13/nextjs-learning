@@ -2,7 +2,7 @@ import Image from "next/image";
 import styles from "./postCard.module.css";
 import Link from "next/link";
 
-export default function PostCard() {
+export default function PostCard({ post }) {
   return (
     <section className={styles.container}>
       <section className={styles.imageContainer}>
@@ -22,9 +22,9 @@ export default function PostCard() {
         </section>
       </section>
       <section className={styles.infoContainer}>
-        <p className={styles.title}>title</p>
-        <p className={styles.desc}>Description</p>
-        <Link href="/" className={styles.link}>
+        <p className={styles.title}>{post.title}</p>
+        <p className={styles.desc}>{post.body}</p>
+        <Link href={`/blog/${post.id}`} className={styles.link}>
           Readmore
         </Link>
       </section>

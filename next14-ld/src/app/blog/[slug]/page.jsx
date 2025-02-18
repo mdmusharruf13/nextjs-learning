@@ -2,9 +2,23 @@ import { use } from "react";
 import styles from "./singlePost.module.css";
 import Image from "next/image";
 
-export default function SinglePostPage({ params }) {
-  const resolvedParams = use(params);
-  console.log(resolvedParams);
+const getData = async (id) => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  return response.json();
+};
+
+export default async function SinglePostPage({ params }) {
+  const { slug } = await params;
+
+  const post = await getData(slug);
+  console.log(post);
   return (
     <section className={styles.container}>
       <section className={styles.imgContainer}>
@@ -17,7 +31,7 @@ export default function SinglePostPage({ params }) {
         />
       </section>
       <section className={styles.infoContainer}>
-        <p className={styles.title}>Title</p>
+        <p className={styles.title}>{post.title}</p>
         <section className={styles.postData}>
           <section className={styles.avatarContainer}>
             <Image
@@ -38,14 +52,7 @@ export default function SinglePostPage({ params }) {
           </section>
         </section>
         <section className={styles.description}>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-            at doloremque quisquam perferendis possimus repudiandae illum, eius,
-            laboriosam dicta, et ea fuga debitis in totam aspernatur. Adipisci
-            esse architecto officiis quasi perspiciatis, dolor eligendi
-            cupiditate, quo aperiam, reiciendis veritatis minima impedit ipsa
-            quod nulla accusamus similique aliquid consequatur sunt magni.
-          </p>
+          <p>{post.body}</p>
         </section>
       </section>
     </section>
