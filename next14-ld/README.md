@@ -43,3 +43,13 @@ It can also happen if the client has a browser extension installed which messes 
 ### dynamic()
 
 This function lets you dynamically import a component. It uses React.lazy() with Suspense under the hood.
+
+### .env
+
+```
+// defining variables
+NEXT_PUBLIC_NAME=musharruf
+
+// using those variables in code
+console.log(process.env.NEXT_PUBLIC_NAME);
+```
