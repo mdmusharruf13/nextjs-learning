@@ -3,9 +3,7 @@ import Image from "next/image";
 import { getPost, getUser } from "@/utils/data";
 
 const getData = async (id) => {
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  );
+  const response = await fetch(`http://localhost:3000/api/blog/${id}`);
 
   if (!response.ok) {
     throw new Error("Something went wrong");
@@ -17,8 +15,8 @@ const getData = async (id) => {
 export default async function SinglePostPage({ params }) {
   const { slug } = await params;
 
-  // const post = await getData(slug);
-  const [post] = await getPost({ slug: slug });
+  const post = await getData(slug);
+  // const [post] = await getPost({ slug: slug });
 
   const [user] = await getUser(post.userId);
 

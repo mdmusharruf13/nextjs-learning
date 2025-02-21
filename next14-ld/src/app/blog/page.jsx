@@ -3,7 +3,7 @@ import styles from "./blog.module.css";
 import { getPosts } from "@/utils/data";
 
 const getData = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+  const response = await fetch("http://localhost:3000/api/blog", {
     next: { revalidate: 3600 },
   });
 
@@ -18,8 +18,12 @@ export default async function BlogPage({ params, searchParams }) {
   params.then((result) => console.log(result));
   searchParams.then((result) => console.log(result));
 
-  // const posts = await getData();
-  const posts = await getPosts();
+  // Fetch data with an API
+  const posts = await getData();
+
+  // Fetch data with an API
+  // const posts = await getPosts();
+
   console.log("posts", posts);
 
   return (
