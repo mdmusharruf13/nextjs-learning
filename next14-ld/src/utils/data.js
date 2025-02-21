@@ -35,4 +35,15 @@ export const getUser = async (id) => {
     } catch (error) {
         console.log(error);
     }
-} 
+}
+
+export const getUsers = async () => {
+    try {
+        const db = await connectToDB();
+        const collection = db.collection('users');
+        const users = await collection.find().toArray();
+        return users;
+    } catch (error) {
+        console.log(error);
+    }
+}
