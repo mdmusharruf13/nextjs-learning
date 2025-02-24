@@ -52,3 +52,20 @@ website-url/projects
 website-url/projects/mini-projects
 website-url/projects/major-projects
 ```
+
+### Dynamic routes - []
+
+Dynamic routes in Next.js allow you to create flexible URLs that can handle different values dynamically, making it possible to _serve multiple pages with a single file_. Instead of hardcoding every route, you can define **dynamic segments** using square brackets (**[]**) in the **pages** directory.
+
+```
+Directory path:
+pages/product/[singleProduct]/page.js
+
+URL path:
+pages/product/123
+pages/product/one
+pages/product/su-57
+```
+
+Those dynamic values can be accessed using **params** props.
+Since the **params** prop is a promise. you must use async/await or React's **use()** function to access the value.
