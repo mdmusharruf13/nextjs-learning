@@ -69,3 +69,14 @@ pages/product/su-57
 
 Those dynamic values can be accessed using **params** props.
 Since the **params** prop is a promise. you must use async/await or React's **use()** function to access the value.
+
+### catch-all route - [...paths]
+
+Dynamic routes can be extended to **catch-all** subsequent routes by adding three dots followed by any name [...folder].
+For example, _app/project/[...slug]/page.js_ will match \_/project/mini, but also _/project/mini/first_, _/project/mini/second/about_, and so on.
+
+| Route                         | Example URL    | params                  |
+| ----------------------------- | -------------- | ----------------------- |
+| app/project/[...slug]/page.js | /project/a     | { slug: ['a'] }         |
+| app/project/[...slug]/page.js | /project/a/b   | { slug: ['a','b'] }     |
+| app/project/[...slug]/page.js | /project/a/b/c | { slug: ['a','b','c'] } |
