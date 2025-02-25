@@ -139,3 +139,41 @@ path: /project/mini-project
 
 console.log(pathName); // /project/mini-project
 ```
+
+### Accessing URL Parameters - params
+
+You can access the parameters of a dynamic route using **params** at client component.
+**Note**: From Next.js 14 onwards **params** is a promise.
+
+**first way**: using useState() and useEffect()
+
+```js
+"use client";
+
+import { useState, useEffect } from "react";
+
+export default function IDPage({params}) {
+  const [paramsState, setParamsState] = useState(null);
+
+  useEffect(function getParams() {
+    params.then(val => setParamsState(val));
+  }, []);
+
+  return <section>ID: {paramsState ? paramsState.id ? "loading..."}</section>
+}
+
+```
+
+**second way**: using React.use();
+
+```js
+"use client";
+
+import { use } from "react";
+
+export default function IDPage({ params }) {
+  const paramsData = use(params);
+
+  return <section>ID: {paramsState.id}</section>;
+}
+```
