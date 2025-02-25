@@ -80,3 +80,36 @@ For example, _app/project/[...slug]/page.js_ will match \_/project/mini, but als
 | app/project/[...slug]/page.js | /project/a     | { slug: ['a'] }         |
 | app/project/[...slug]/page.js | /project/a/b   | { slug: ['a','b'] }     |
 | app/project/[...slug]/page.js | /project/a/b/c | { slug: ['a','b','c'] } |
+
+### Navigation
+
+In client component you can use **useRouter()** hook to navigate.
+
+```js
+"use client";
+import { useRouter } from "next/navigation";
+
+const router = useRouter();
+
+<button onClick={() => router.push("/contact")}>go to contact section</button>;
+```
+
+In server component you can use **redirect()** method to navigate.
+
+```js
+import { redirect } from "next/navigation";
+
+const redirectUser = true;
+
+if (redirectUser) redirect("/projects");
+```
+
+### Link Component - navigation
+
+Link component can also be used for navigation.
+
+```js
+import Link from "next/Link";
+
+<Link href={"/projects"}>go yo project</Link>;
+```
