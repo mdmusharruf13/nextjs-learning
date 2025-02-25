@@ -177,3 +177,15 @@ export default function IDPage({ params }) {
   return <section>ID: {paramsState.id}</section>;
 }
 ```
+
+### Accessing Dynamic Route Parameter in Server Component
+
+In Server Component params object is a promise you should use async/await to resolve that promsie object before using it. Server Components can be async but not Client Component.
+
+```js
+export default async function ProjectIDPage({ params }) {
+  const paramsData = await params;
+
+  return <section>project id: {paramsData.project_id}</section>;
+}
+```
