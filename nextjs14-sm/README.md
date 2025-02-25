@@ -189,3 +189,18 @@ export default async function ProjectIDPage({ params }) {
   return <section>project id: {paramsData.project_id}</section>;
 }
 ```
+
+### useSearchParams in Server Component
+
+Similar to **useSearchParams()** there is **searchParams** prop in server component, but it is a promise object.
+
+```js
+export default async function ProjectIDPage({ searchParams }) {
+
+    const resolvedSearchParams = await searchParams;
+
+    /project/mini-project/55?name=mush&lang=js
+
+    console.log(resolvedSearchParams); // {name: 'mush', lang: 'js'}
+}
+```
