@@ -113,3 +113,29 @@ import Link from "next/Link";
 
 <Link href={"/projects"}>go yo project</Link>;
 ```
+
+### Client side URL
+
+**useSearchParams()**: A Clinet Component hook that lets you read the current URL's search parameters.
+
+```js
+import { useSearchParams } from "next/navigation";
+
+const searchParams = useSearchParams();
+
+path: /project/1?name=mini
+
+console.log(searchParams.get("name")); // mini
+```
+
+**usePathname()**: A Client Component hook that lets you read current URL's pathname.
+
+```js
+import { usePathname } from "next/navigation";
+
+const pathName = usePathname();
+
+path: /project/mini-project
+
+console.log(pathName); // /project/mini-project
+```
