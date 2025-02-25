@@ -204,3 +204,50 @@ export default async function ProjectIDPage({ searchParams }) {
     console.log(resolvedSearchParams); // {name: 'mush', lang: 'js'}
 }
 ```
+
+## loading.js
+
+- The **loading.js** file is a special React Suspense-based loader in Next.js that automatically show a loading UI while a page is being fetched or rendered.
+- **loading.js** only works if your page has dynamic behaviour (eg., fetching data, waiting for a response).
+- If a page is fully static, Next.js won't show **loading.js** because there's nothing to 'load'.
+- By default, this file is a Server Component - but can also be used as a Client Component through the "use client" directive.
+- **loading.js** only works with Server Compoenent and not client components, if you are using "use client", wrap the component in Suspense instead.
+
+If you want you can add artificial delay to see the loader.
+
+```js
+export default async function ContactPage() {
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2s delay
+  return <h1>Contact page</h1>;
+}
+```
+
+## not-found.js
+
+Next.js Uses Global **_not-found.js_** for custom not-found pages.
+
+By default, Next.js only triggers **_not-found.js_** inside a folder if a route in that folder calls **_notFound()_** explicitly.
+
+- **option 1: Use a Catch-All Route ([...slug])**:
+  This automatically catches all invalid subpaths inside each folder and trigger **_not-found.js_** of that particular folder but not global **_not-found.js_**.
+  ```js
+  app/
+  |--contact/
+  |     |--[...slug]/          <-- catches all subpaths after contact
+  |     |     |--page.js       <-- calls `notFound()`
+  |     |--not-found.js        <-- custom 404 for `/contact/`
+  ```
+- **option 2: Manually call _notFound()_ in page.js**
+  If you don't want a to catch-all route, you can manually handle the 404 inside particular directory.
+
+  ```js
+  import { notFound } from "next/navigation";
+
+  export default function CatchAllPage() {
+    notFound(); // triggers `app/contact/not-found.js`
+  }
+  ```
+
+  Now, visiting _/contact/user_ will trigger _app/contact/not-found.js_.
+
+**Note**: If you want **not-found.js** to work inside every folder, add a catch-all route ([...slug]) in each folder. This ensures that every folder uses its own **not-found.js** automatically.
