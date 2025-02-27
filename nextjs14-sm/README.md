@@ -251,3 +251,148 @@ By default, Next.js only triggers **_not-found.js_** inside a folder if a route 
   Now, visiting _/contact/user_ will trigger _app/contact/not-found.js_.
 
 **Note**: If you want **not-found.js** to work inside every folder, add a catch-all route ([...slug]) in each folder. This ensures that every folder uses its own **not-found.js** automatically.
+
+## Server Side Data Fetching
+
+1. **Basic Server-Side Fetching (Default in _app/_)**:  
+    All components in the _app/_ directory are **Server Components by default**, meaning you can use **fetch()** without async functions like **getServreSideProps** (_used in pages/_).
+
+   **Note**: this is just demo there is lot more things to do in the below example, see my example code [check here](/src/app/server-data-fetch/page.js).
+
+   ```js
+   export default async function UserPage() {
+   const response = await fetch('https://dummyjson.com/users');
+   const users = await response.json();
+
+   return (
+     <section>
+       <h1>User List</h1>
+       <u1>
+         {users.map(user => <li key={user.id}>{user.firstName}</li>)}
+       </ul>
+     </section>
+   )
+   }
+   ```
+
+   **How it works:**
+
+   - **fetch()** runs only on the server.
+   - The **entire HTML** is generated **before** sending it to the client.
+   - **No client-side JavaScript needed -> better performance & SEO**.
+
+2. **Fetching with _cache_ & _no-cache_ (Control Caching)**:
+
+   By default, **fetch() caches responses to improve performance**.  
+   But if you want **fresh data** on every request, use **{ cache: "no-store" }**.  
+   **Without cache: "no-store", Next.js may serve old data from cache**.
+
+   ```js
+   const response = await fetch("api", {
+     cache: "no-store", // No caching (fetch fresh data every time).
+   });
+   const data = await response.json();
+   ```
+
+3. **Fetching with Revalidation (revalidate)**:
+   If your API data **doesn't changes frequently**, but you still want to update it **every x seconds**, use **revalidate**.
+
+   ```js
+   const response = await fetch(api, {
+     next: { revalidate: 30 }, // cache for 30 seconds, then fetch fresh data
+   });
+   const data = await response.json();
+   ```
+
+   **How it works**:
+
+   - Data is **cached** for **30 seconds**.
+   - After 30 seconds, the next request **fetches fresh data**.
+
+4. **Server-Side Fetching with Database (MongoDB Example)**:
+   To fetch data from a **database**, we connect to the DB inside the **server component**.
+
+   ```js
+   const db = await connectDB();
+   const users = await db.collection("users").find().toArray();
+   ```
+
+   **Note**: **This is fully server-side** and never exposes database credentials to the client.
+
+**When NOT to Use Server-Side Fetching?**
+
+- If data needs to be updated in real-time (use Client Components + _useEffect_ instead).
+- If data is user-specific (fetch it in a Client Compoennt with _useEffect_).
+- If the page is a Client Component ("use client") - use Susupense or API calls instead.
+
+## Client-Side Data Fetching in Next.js (_app/_ Directory):
+
+Client-side data fetching in Next.js means **fetching data on the user's browser after the page loads**, using **React hooks like _useEffect_ or _useSWR_**.
+
+1. **Basic Fetching Using _useEffect_ and _useState_**.
+   This is the most common way to fetch data in **client component**.
+
+   ```js
+   "use client"; // Important: This must be at the top
+   import { useEffect, useState } from "react";
+
+   export default function UserPage() {
+     const [users, setUsers] = useState([]);
+     const [loading, setLoading] = useState(true);
+
+     useEffect(() => {
+       fetch("https://dummyjson.com/users")
+         .then((response) => response.json())
+         .then((data) => {
+           setUsers(data.users);
+           setLoading(false);
+         });
+     }, []); // Empty dependency array = fetch data only once
+
+     if (loading) return <p>loading...</p>;
+
+     return (
+       <section>
+         <h1>Users List</h1>
+         <ul>
+           {users.map((user) => (
+             <li key={user.id}>{user.firstName}</li>
+           ))}
+         </ul>
+       </section>
+     );
+   }
+   ```
+
+   **How it works**:
+
+   - **_useEffect_** runs once when the component mounts (**[] dependency array**).
+   - **Loading state** ensures a smooth user experience.
+   - **Data updates in the browser without refreshing the page**.
+
+2. **Fetching Data on User Interaction (Button Click)**:
+
+   Instead of fetching data **on mount**, you can **fetch it when a button is clicked**.  
+   Useful for **on-demand fetching** (e.g., searching, pagination).
+
+3. **Optimized Fetching with _useSWR_ (Automatic Caching & Re-fetching)**: [see example](/src/app/client-data-fetch/[swrId]/page.js)
+
+   **_useSWR_** is a better alternative to **_useEffect_**, as it provides:
+
+   - Automatic **Caching & Revalidation**.
+   - Handles **loading and error states**.
+
+4. **Fetching Data with Pagination**:
+
+   If your API supports **pagination**, you can **update the pages numbers dynamically**.
+
+   - _page_ state updates the **API URL Dynamically**.
+   - Fetches **new data** when _page_ changes.
+   - Prevents **unnecessary re-fetching**.
+
+**When to Use Client-Side Fetching?**
+
+- When data is **user-specific** (e.g., auth user data).
+- When data **changes frequently** (e.g., notifications, search results).
+- When you need **real-time updates** (use useSWR or WebSockets).
+- **Avoid client-side fetching for SEO-related content (use server-side fetching instead)**.
