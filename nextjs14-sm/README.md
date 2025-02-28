@@ -396,3 +396,22 @@ Client-side data fetching in Next.js means **fetching data on the user's browser
 - When data **changes frequently** (e.g., notifications, search results).
 - When you need **real-time updates** (use useSWR or WebSockets).
 - **Avoid client-side fetching for SEO-related content (use server-side fetching instead)**.
+
+## Mini Blog Project
+
+```js
+npm i mongoose
+```
+
+- **Connect to Database**:
+
+  ```js
+  import mongoose from "mongoose";
+
+  export default async function connectToDB() {
+    mongoose
+      .connect(process.env.DB_URL)
+      .then(() => console.log("connected to DB successfully"))
+      .catch((err) => console.error(err));
+  }
+  ```
