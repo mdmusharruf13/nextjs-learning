@@ -430,3 +430,69 @@ npm i mongoose
 
   export default Blog;
   ```
+
+## Backend APIs:
+
+- To create Backend APIs, create inside _app/api/_ directory all the files and folders will be considered as api routes.
+- For Frontend **page.js** will be served to the user from a folder, similar to that **route.js** will be considered as the backend route.
+
+## POST request from Client
+
+```js
+export default function ClientPage() {
+  const handleFormSubmission = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/blog/add-blog", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(blogData),
+      });
+      const result = await response.json();
+      console.log(result.message);
+    } catch (err) {
+      console.log(error);
+    }
+  };
+
+  return <>...</>;
+}
+```
+
+## Recevied Request (POST) from Client and adding to Database
+
+```js
+export async function POST(req) {
+  try {
+    const data = req.json();
+    const { title, description } = data;
+
+    if (!title || !description) {
+      return NextResponse.json({
+        success: false,
+        message: "one field is missing",
+      });
+    }
+
+    const insertedResult = Blog.create({ title, description });
+    if (insertedResult) {
+      return NextResponse.json({
+        success: true,
+        message: "inserted successfully",
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: "something went wrong, please try again later",
+      });
+    }
+  } catch (err) {
+    return NextResponse.json({
+      success: false,
+      message: "something went wrong, please try again later",
+    });
+  }
+}
+```
