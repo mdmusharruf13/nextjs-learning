@@ -1,32 +1,30 @@
 "use client";
 
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Model from "./Model";
 import Button from "./Button";
+import BlogPost from "./BlogPost";
 
 const initialBlogData = {
     title: "",
     description: ""
 };
 
+export const BLOG_ACTION = {
+    ADD: 'add-blog',
+    UPDATE: 'update-blog',
+    DELETE: 'delete-blog',
+    GET: 'get-blog',
+}
+
 export default function BlogOverview({ blogs }) {
     const [isActive, setIsActive] = useState(false);
     const [blogData, setBlogData] = useState(initialBlogData);
     const [btnLabel, setBtnLabel] = useState("Add Blog");
-    const [blogList, setBlogList] = useState([]);
 
-    useEffect(() => {
-        if (blogs.success) {
-            setBlogList([...blogs.data])
-        }
-    }, []);
-
-
-    const handleFormSubmit = async (event) => {
-        event.preventDefault();
+    const handleFormSubmit = async (action) => {
         try {
-            const response = await fetch("/api/blog/add-blog", {
+            const response = await fetch(`/api/blog/${action}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,15 +47,10 @@ export default function BlogOverview({ blogs }) {
                 <Button onClick={() => setIsActive(!isActive)}>Add New Blog</Button>
             </section>
             <section className={`fixed top-0 ${!isActive && "hidden"}`}>
-                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, btnLabel, handleFormSubmit }} />
+                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, btnLabel, handleFormSubmit }} actionType={BLOG_ACTION.ADD} />
             </section>
             <section className="flex flex-col gap-2">
-                {blogList?.length && blogList.map(blog => (
-                    <section key={blog._id.toString()} className="border border-black">
-                        <h2 className="font-bold">{blog.title}</h2>
-                        <p>{blog.description}</p>
-                    </section>
-                ))}
+                <BlogPost blogs={blogs} />
             </section>
         </main>
     )

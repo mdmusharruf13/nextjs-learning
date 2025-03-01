@@ -1,6 +1,11 @@
 import Button from "./Button";
 
-export default function Model({ isActive, setIsActive, initialBlogData, blogData, setBlogData, btnLabel, handleFormSubmit }) {
+export default function Model({ isActive, setIsActive, initialBlogData, blogData, setBlogData, btnLabel, handleFormSubmit, actionType }) {
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleFormSubmit(actionType);
+    }
 
     return <section className={`min-h-screen w-screen bg-transparent transition-all backdrop-blur-sm duration-300 ${!isActive && "hidden"}`}>
         <section className="w-[450px] h-[350px] mx-auto bg-gray-100  flex flex-col justify-between px-10 py-8 rounded-lg absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
@@ -40,10 +45,8 @@ export default function Model({ isActive, setIsActive, initialBlogData, blogData
                         required
                     ></textarea>
                 </section>
-                <section className="flex justify-end"><Button onClick={handleFormSubmit}>{btnLabel}</Button></section>
+                <section className="flex justify-end"><Button onClick={handleSubmit}>{btnLabel}</Button></section>
             </form>
-
-
         </section>
     </section>
 }
