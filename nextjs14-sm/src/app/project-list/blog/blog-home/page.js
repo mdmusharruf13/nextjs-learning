@@ -16,7 +16,7 @@ export async function getBlogs() {
 export default async function BlogHomePage() {
 
     const blogs = await getBlogs();
-    console.log(blogs);
+    // console.log(blogs);
     return (
         <>
             <BlogOverview blogs={blogs} />

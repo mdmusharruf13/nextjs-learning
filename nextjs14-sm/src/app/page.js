@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +15,8 @@ export default function Home() {
       <Link href={"/about"}>Navigate to About us page</Link>
 
       <button className="font-bold mt-23 text-lg" onClick={() => router.push("/projects")}>Alternative way of navigating</button>
+
+      <Button onClick={() => router.push("project-list/blog/blog-home")}>Go to Blog Project</Button>
     </section>
   </main>
 }

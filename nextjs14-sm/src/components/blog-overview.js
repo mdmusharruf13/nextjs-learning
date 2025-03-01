@@ -6,7 +6,7 @@ import Button from "./Button";
 import BlogPost from "./BlogPost";
 import { getBlogs } from "@/app/project-list/blog/blog-home/page";
 
-const initialBlogData = {
+export const initialBlogData = {
     title: "",
     description: "",
     id: ""
@@ -31,29 +31,23 @@ export const BLOG_ACTION = {
     },
 }
 
+export const defaultAction = {
+    action: '',
+    heading: '',
+    btnLabel: ''
+}
+
 export default function BlogOverview({ blogs }) {
     const [isActive, setIsActive] = useState(false);
     const [blogData, setBlogData] = useState(initialBlogData);
     const [blogList, setBlogList] = useState([]);
-    const [currentAction, setCurrentAction] = useState({
-        action: null,
-        heading: '',
-        btnLabel: ''
-    });
+    const [currentAction, setCurrentAction] = useState(defaultAction);
 
     useEffect(() => {
         if (blogs.success) {
             setBlogList(blogs.data);
         }
     }, []);
-
-    useEffect(() => {
-        if (!isActive) {
-            getBlogs().then(res => {
-                setBlogList(res.data);
-            });
-        }
-    }, [isActive]);
 
     const handleFormSubmit = async () => {
         const { method, path } = currentAction.action;
@@ -72,6 +66,9 @@ export default function BlogOverview({ blogs }) {
 
             setBlogData(initialBlogData);
             setIsActive(false);
+            getBlogs().then(res => {
+                setBlogList(res.data);
+            });
         } catch (error) {
             console.log(error);
         }
@@ -86,10 +83,10 @@ export default function BlogOverview({ blogs }) {
                 }}>Add New Blog</Button>
             </section>
             <section className={`fixed top-0 ${!isActive && "hidden"}`}>
-                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, handleFormSubmit }} currentAction={currentAction} />
+                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, handleFormSubmit, setCurrentAction }} currentAction={currentAction} />
             </section>
             <section className="flex flex-col gap-2">
-                <BlogPost {...{ blogList, setIsActive, setBlogData, setCurrentAction, handleFormSubmit }} />
+                <BlogPost {...{ blogList, setIsActive, blogData, setBlogData, currentAction, setCurrentAction, handleFormSubmit }} />
             </section>
         </main>
     )
