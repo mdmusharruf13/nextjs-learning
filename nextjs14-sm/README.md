@@ -436,23 +436,56 @@ npm i mongoose
 - To create Backend APIs, create inside _app/api/_ directory all the files and folders will be considered as api routes.
 - For Frontend **page.js** will be served to the user from a folder, similar to that **route.js** will be considered as the backend route.
 
+## Utils
+
+Predefined method and route for making REST API request.
+
+```js
+export const BLOG_ACTION = {
+  ADD: {
+    path: "add-blog",
+    method: "POST",
+  },
+  UPDATE: {
+    path: "update-blog",
+    method: "PUT",
+  },
+  DELETE: {
+    path: "delete-blog",
+    method: "DELETE",
+  },
+  GET: {
+    path: "get-blog",
+    method: "GET",
+  },
+};
+```
+
 ## POST request from Client
 
 ```js
 export default function ClientPage() {
-  const handleFormSubmission = async (e) => {
-    e.preventDefault();
+  const handleFormSubmit = async () => {
+    const { method, path } = currentAction.action;
+    const obj =
+      method == "GET"
+        ? { method }
+        : {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(blogData),
+          };
     try {
-      const response = await fetch("/api/blog/add-blog", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(blogData),
-      });
+      const response = await fetch(`/api/blog/${path}`, obj);
+
       const result = await response.json();
-      console.log(result.message);
-    } catch (err) {
+      console.log("response is :", result);
+
+      setBlogData(initialBlogData);
+      setIsActive(false);
+    } catch (error) {
       console.log(error);
     }
   };
