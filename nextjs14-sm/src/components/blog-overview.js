@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Model from "./Model";
 import Button from "./Button";
 import BlogPost from "./BlogPost";
+import { getBlogs } from "@/app/project-list/blog/blog-home/page";
 
 const initialBlogData = {
     title: "",
@@ -21,6 +22,21 @@ export default function BlogOverview({ blogs }) {
     const [isActive, setIsActive] = useState(false);
     const [blogData, setBlogData] = useState(initialBlogData);
     const [btnLabel, setBtnLabel] = useState("Add Blog");
+    const [blogList, setBlogList] = useState([]);
+
+    useEffect(() => {
+        if (blogs.success) {
+            setBlogList(blogs.data);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isActive) {
+            getBlogs().then(res => {
+                setBlogList(res.data);
+            });
+        }
+    }, [isActive]);
 
     const handleFormSubmit = async (action) => {
         try {
@@ -50,7 +66,7 @@ export default function BlogOverview({ blogs }) {
                 <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, btnLabel, handleFormSubmit }} actionType={BLOG_ACTION.ADD} />
             </section>
             <section className="flex flex-col gap-2">
-                <BlogPost blogs={blogs} />
+                <BlogPost blogList={blogList} />
             </section>
         </main>
     )

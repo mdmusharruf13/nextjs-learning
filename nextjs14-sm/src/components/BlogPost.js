@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function BlogPost({ blogs }) {
-    const [blogList, setBlogList] = useState([]);
-
-    useEffect(() => {
-        if (blogs.success) {
-            setBlogList(blogs.data);
-        }
-    }, []);
+export default function BlogPost({ blogList }) {
 
     return (
         <>
