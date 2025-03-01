@@ -8,24 +8,25 @@ import { getBlogs } from "@/app/project-list/blog/blog-home/page";
 
 const initialBlogData = {
     title: "",
-    description: ""
+    description: "",
+    id: ""
 };
 
 export const BLOG_ACTION = {
     ADD: {
-        action: 'add-blog',
+        path: 'add-blog',
         method: 'POST'
     },
     UPDATE: {
-        action: 'update-blog',
-        method: 'UPDATE'
+        path: 'update-blog',
+        method: 'PUT'
     },
     DELETE: {
-        action: 'delete-blog',
+        path: 'delete-blog',
         method: 'DELETE'
     },
     GET: {
-        action: 'get-blog',
+        path: 'get-blog',
         method: 'GET'
     },
 }
@@ -33,8 +34,12 @@ export const BLOG_ACTION = {
 export default function BlogOverview({ blogs }) {
     const [isActive, setIsActive] = useState(false);
     const [blogData, setBlogData] = useState(initialBlogData);
-    const [btnLabel, setBtnLabel] = useState("Add Blog");
     const [blogList, setBlogList] = useState([]);
+    const [currentAction, setCurrentAction] = useState({
+        action: null,
+        heading: '',
+        btnLabel: ''
+    });
 
     useEffect(() => {
         if (blogs.success) {
@@ -50,17 +55,20 @@ export default function BlogOverview({ blogs }) {
         }
     }, [isActive]);
 
-    const handleFormSubmit = async ({ method, action }) => {
+    const handleFormSubmit = async () => {
+        const { method, path } = currentAction.action;
+        const obj = method == 'GET' ? { method } : {
+            method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(blogData),
+        }
         try {
-            const response = await fetch(`/api/blog/${action}`, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(blogData),
-            });
+            const response = await fetch(`/api/blog/${path}`, obj);
 
             const result = await response.json();
+            console.log("response is :", result);
 
             setBlogData(initialBlogData);
             setIsActive(false);
@@ -72,13 +80,16 @@ export default function BlogOverview({ blogs }) {
     return (
         <main className="min-h-screen min-w-full">
             <section>
-                <Button onClick={() => setIsActive(!isActive)}>Add New Blog</Button>
+                <Button onClick={() => {
+                    setIsActive(!isActive);
+                    setCurrentAction({ action: BLOG_ACTION.ADD, heading: 'Add New Blog', btnLabel: 'Add Blog' })
+                }}>Add New Blog</Button>
             </section>
             <section className={`fixed top-0 ${!isActive && "hidden"}`}>
-                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, btnLabel, handleFormSubmit }} actionType={BLOG_ACTION.ADD} />
+                <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, handleFormSubmit }} currentAction={currentAction} />
             </section>
             <section className="flex flex-col gap-2">
-                <BlogPost {...{ blogList, isActive, setIsActive, setBlogData }} />
+                <BlogPost {...{ blogList, setIsActive, setBlogData, setCurrentAction, handleFormSubmit }} />
             </section>
         </main>
     )
