@@ -12,10 +12,22 @@ const initialBlogData = {
 };
 
 export const BLOG_ACTION = {
-    ADD: 'add-blog',
-    UPDATE: 'update-blog',
-    DELETE: 'delete-blog',
-    GET: 'get-blog',
+    ADD: {
+        action: 'add-blog',
+        method: 'POST'
+    },
+    UPDATE: {
+        action: 'update-blog',
+        method: 'UPDATE'
+    },
+    DELETE: {
+        action: 'delete-blog',
+        method: 'DELETE'
+    },
+    GET: {
+        action: 'get-blog',
+        method: 'GET'
+    },
 }
 
 export default function BlogOverview({ blogs }) {
@@ -38,10 +50,10 @@ export default function BlogOverview({ blogs }) {
         }
     }, [isActive]);
 
-    const handleFormSubmit = async (action) => {
+    const handleFormSubmit = async ({ method, action }) => {
         try {
             const response = await fetch(`/api/blog/${action}`, {
-                method: 'POST',
+                method,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -66,7 +78,7 @@ export default function BlogOverview({ blogs }) {
                 <Model {...{ isActive, setIsActive, blogData, setBlogData, initialBlogData, btnLabel, handleFormSubmit }} actionType={BLOG_ACTION.ADD} />
             </section>
             <section className="flex flex-col gap-2">
-                <BlogPost blogList={blogList} />
+                <BlogPost {...{ blogList, isActive, setIsActive, setBlogData }} />
             </section>
         </main>
     )
