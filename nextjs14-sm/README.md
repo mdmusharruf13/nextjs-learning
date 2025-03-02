@@ -435,6 +435,7 @@ npm i mongoose
 
 - To create Backend APIs, create inside _app/api/_ directory all the files and folders will be considered as api routes.
 - For Frontend **page.js** will be served to the user from a folder, similar to that **route.js** will be considered as the backend route.
+- In one **route.js** file there can be all request (**GET, POST, PUT, DELETE**).
 
 ## Utils
 
@@ -494,6 +495,8 @@ export default function ClientPage() {
 }
 ```
 
+**Note**: See full code for better understanding [here](/src/components/blog-overview.js).
+
 ## Recevied Request (POST) from Client and adding to Database
 
 ```js
@@ -526,6 +529,120 @@ export async function POST(req) {
       success: false,
       message: "something went wrong, please try again later",
     });
+  }
+}
+```
+
+## GET Request
+
+Path is _/api/blog/get-blog_.
+
+```js
+import connectToDB from "@/database/blogdb";
+import Blog from "@/model/blog";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  try {
+    async connectToDB();
+
+    const blogs = await Blog.find({});
+    if(Blog) {
+      return NextResponse.json({
+        success: true,
+        message: "successfully fetched data",
+        data: blogs
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
+    }
+  } catch(err) {
+    console.log(err);
+    return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
+  }
+}
+```
+
+## PUT Request
+
+Path is _/api/blog/update-blog_.
+
+```js
+import connectToDB from "@/database/blogdb";
+import Blog from "@/model/blog";
+import { NextResponse } from "next/server";
+
+export async function PUT(request) {
+  try {
+    async connectToDB();
+
+    const {title, description, id} = await request.json();
+
+    const updatedResult = await Blog.findByIdAndUpdate(
+      {_id: id}, {title, description}, {new: true}
+    );
+
+    if(updatedResult) {
+      return NextResponse.json({
+        success: true,
+        message: "successfully updated blog",
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
+    }
+  } catch(err) {
+    console.log(err);
+    return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
+  }
+}
+```
+
+## DELETE Request
+
+Path is _/api/blog/delete-blog_.
+
+```js
+import connectToDB from "@/database/blogdb";
+import Blog from "@/model/blog";
+import { NextResponse } from "next/server";
+
+export async function DELETE(request) {
+  try {
+    async connectToDB();
+
+    const {id} = await request.json();
+
+    const deletedResult = await Blog.findByIdAndDelete(id);
+
+    if(deletedResult) {
+      return NextResponse.json({
+        success: true,
+        message: "successfully deleted blog",
+      });
+    } else {
+      return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
+    }
+  } catch(err) {
+    console.log(err);
+    return NextResponse.json({
+        success: false,
+        message: "something went wrong | please try again later"
+      });
   }
 }
 ```
