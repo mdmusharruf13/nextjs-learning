@@ -708,3 +708,45 @@ export async function DELETE(req) {
   }
 }
 ```
+
+## Server Actions and Mutations
+
+Server Actions are **asynchronous functions** that are executed on the server. They can be called in Server and Client Components to handle form submission and data mutations in Next.js applications.
+
+- **Server Components**:
+
+  Server Components can use the inline function level or module level **"use server"** directive. To inline a Server Action, add "use server" to the top of the function body:
+
+  ```js
+  export default function Page() {
+    // Server Action
+    async function create() {
+      "use server";
+      // Mutate data
+    }
+
+    return ...;
+  }
+  ```
+
+- **Client Components**:
+
+  To call a Server Action in a Client Component, create a new file and add the **"use server"** directive at the top of it. All exported functions within the file will be marked as Server Actions that can be reused both in Client and Server Components:
+
+  ```js
+  "use server";
+
+  export async function create() {}
+  ```
+
+  ```js
+  "use client";
+
+  import { create } from './actions;
+
+  export default function Button() {
+    return <button onClick={() create()}>Create</button>
+  }
+  ```
+
+Instead of fetching data in client component try to fetch the data in server component and export it.
