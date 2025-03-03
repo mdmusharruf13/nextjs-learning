@@ -23,7 +23,7 @@ export const userFormInputs = [
     },
     {
         type: "input",
-        name: "firstname",
+        name: "address",
         placeholder: 'Enter your address',
     }
 ];
@@ -31,11 +31,6 @@ export const userFormInputs = [
 export const initialModelInfo = {
     title: '',
     btnLabel: ''
-};
-
-export const MODEL_ACTION = {
-    ADD: 'add',
-    UPDATE: 'update'
 };
 
 export const MODEL_STATE = {
