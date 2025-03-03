@@ -646,3 +646,65 @@ export async function DELETE(request) {
   }
 }
 ```
+
+## Deleting Blog another way
+
+```js
+// client side code
+function BlogOverview() {
+
+  const router = useRouter();
+
+  async function deleteBlog(id) {
+    try {
+      const req = await fetch(`/api/blog/delete-blog?id={id}`, { method: 'DELETE'});
+      conat result = await req.json();
+      console.log(result);
+      if(result.success) {
+        router.referesh();
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  return <section>...</section>
+}
+```
+
+```js
+// server side code
+export async function DELETE(req) {
+  try {
+    await connectToDB();
+    const { searchParams } = new URL(req.url);
+    const currentBlogId = searchParams.get("id");
+
+    if (!currentBlogId) {
+      return NextResponse.json({
+        success: false,
+        message: "Blog ID is required",
+      });
+    }
+
+    const deleteBlog = await Blog.findByIdAndDelete(currentBlogId);
+
+    if (deleteBlog) {
+      return NextResponse.json({
+        success: true,
+        message: "Blog deleted successfully",
+      });
+    }
+
+    return NextResponse.json({
+      success: false,
+      message: "something went wrong | Pleaes try again later",
+    });
+  } catch (err) {
+    return NextResponse.json({
+      success: false,
+      message: "something went wrong | Pleaes try again later",
+    });
+  }
+}
+```
