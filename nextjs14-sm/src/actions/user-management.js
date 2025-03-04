@@ -8,9 +8,9 @@ export async function addNewUser(user) {
     try {
         await connectToDB();
 
-        const User = await User.create(user);
-        if (User) {
-            console.log(User);
+        const user = await User.create(user);
+        if (user) {
+            console.log(user);
             return {
                 success: true,
                 message: "user added successfully"
