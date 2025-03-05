@@ -2,9 +2,9 @@
 
 import AddNewUserCard from "@/components/add-new-user-card";
 import CustomModel from "@/components/CustomModel";
-import { initialModelInfo, initialUserData, userFormInputs } from "@/util/user-helper";
+import { initialModelInfo, initialUserData, MODEL_STATE, userFormInputs } from "@/util/user-helper";
 import { createContext, useEffect, useState } from "react";
-import { addNewUser, getAllUsers } from "@/actions/user-management"
+import { addNewUser, getAllUsers, updateUser } from "@/actions/user-management"
 import SingleUserCard from "@/components/Single-user-card";
 
 export const UserContext = createContext(null);
@@ -16,25 +16,44 @@ export default function UserManagementPage() {
     const [openModel, setOpenModel] = useState(false);
     const [users, setUsers] = useState([]);
 
-
-    useEffect(() => {
-        const fetchUsers = async () => {
+    const fetchUsers = () => {
+        const fetchUserList = async () => {
             const userList = await getAllUsers();
-            console.log("userList", userList);
+            console.log("fetcheUsers() - userList", userList);
             setUsers(userList.data);
         }
+        fetchUserList();
+    }
+
+    useEffect(() => {
         fetchUsers();
     }, []);
 
-    function addNewUserData(event) {
-        event.preventDefault();
+    function addNewUserData() {
         addNewUser(userData);
         setUserData(initialUserData);
         setOpenModel(prev => !prev);
+        fetchUsers();
     }
 
+    async function updateUserData() {
+        const result = await updateUser(userData);
+        console.log("result", result);
+        setUserData(initialUserData);
+        setOpenModel(prev => !prev);
+        fetchUsers();
+    }
 
-    return <UserContext.Provider value={{ userData, modelInfo, setModelInfo, setUserData, userFormInputs, setOpenModel, addNewUserData }}>
+    function modelDataSubmit(e) {
+        e.preventDefault();
+        if (modelInfo.title == MODEL_STATE.ADD.title) {
+            addNewUserData();
+        } else if (modelInfo.title == MODEL_STATE.UPDATE.title) {
+            updateUserData();
+        }
+    }
+
+    return <UserContext.Provider value={{ userData, modelInfo, setModelInfo, setUserData, userFormInputs, setOpenModel, modelDataSubmit }}>
         <section className="w-[90%] mx-auto flex flex-col gap-4">
 
             <section className="mt-4 flex justify-between">

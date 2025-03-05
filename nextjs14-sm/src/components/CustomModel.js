@@ -3,7 +3,7 @@ import { useContext } from "react"
 import Button from "./Button";
 
 export default function CustomModel() {
-    const { userData, setUserData, modelInfo, userFormInputs, setOpenModel, addNewUserData } = useContext(UserContext);
+    const { userData, setUserData, modelInfo, userFormInputs, setOpenModel, modelDataSubmit } = useContext(UserContext);
 
     return <section className={`w-[500px] h-[50vh] bg-gray-100 border border-gray-400 rounded-md flex flex-col gap-6 p-6`}>
         <section className="flex justify-between">
@@ -26,7 +26,7 @@ export default function CustomModel() {
                 </section>
             ))}
             <section className="flex justify-center">
-                <Button onClick={(e) => { addNewUserData(e) }} type={"button"}>{modelInfo.btnLabel}</Button>
+                <Button onClick={(e) => { modelDataSubmit(e) }} type={"button"}>{modelInfo.btnLabel}</Button>
             </section>
         </form>
     </section>
