@@ -33,3 +33,34 @@ export async function addNewUser(userData) {
         mongoose.disconnect();
     }
 }
+
+
+export async function getAllUsers() {
+    try {
+        await connectToDB();
+
+        const allUsers = await User.find({});
+        console.log(allUsers);
+
+        if (allUsers) {
+            return {
+                success: true,
+                data: JSON.parse(JSON.stringify(allUsers))
+            }
+        }
+
+        return {
+            success: false,
+            message: "something went wrong please try again later"
+        }
+
+    } catch (err) {
+        console.log(err);
+        return {
+            success: false,
+            message: "something went wrong please try again later"
+        }
+    } finally {
+        mongoose.disconnect()
+    }
+}
