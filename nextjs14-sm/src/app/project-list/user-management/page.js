@@ -29,28 +29,18 @@ export default function UserManagementPage() {
         fetchUsers();
     }, []);
 
-    function addNewUserData() {
-        addNewUser(userData);
-        setUserData(initialUserData);
-        setOpenModel(prev => !prev);
-        fetchUsers();
-    }
-
-    async function updateUserData() {
-        const result = await updateUser(userData);
-        console.log("result", result);
-        setUserData(initialUserData);
-        setOpenModel(prev => !prev);
-        fetchUsers();
-    }
-
-    function modelDataSubmit(e) {
+    async function modelDataSubmit(e) {
         e.preventDefault();
         if (modelInfo.title == MODEL_STATE.ADD.title) {
-            addNewUserData();
+            addNewUser(userData);
+
         } else if (modelInfo.title == MODEL_STATE.UPDATE.title) {
-            updateUserData();
+            const result = await updateUser(userData);
+            console.log("result", result);
         }
+        setUserData(initialUserData);
+        setOpenModel(prev => !prev);
+        fetchUsers();
     }
 
     async function deleteSingleUser(id) {
