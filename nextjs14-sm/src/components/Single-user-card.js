@@ -5,7 +5,7 @@ import { useContext } from "react";
 
 export default function SingleUserCard({ user }) {
 
-    const { setOpenModel, setModelInfo, setUserData } = useContext(UserContext);
+    const { setOpenModel, setModelInfo, setUserData, deleteSingleUser } = useContext(UserContext);
     return (
         <section className="shadow-md border p-4 rounded-md flex flex-col gap-3 max-w-fit">
             <section>
@@ -19,7 +19,10 @@ export default function SingleUserCard({ user }) {
                     setOpenModel(prev => !prev);
                     setUserData(user);
                 }}>Update</Button>
-                <Button>Delete</Button>
+                <Button onClick={(e) => {
+                    e.preventDefault();
+                    deleteSingleUser(user._id);
+                }}>Delete</Button>
             </section>
         </section>
     )

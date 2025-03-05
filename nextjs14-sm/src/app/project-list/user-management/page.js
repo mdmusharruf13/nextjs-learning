@@ -4,7 +4,7 @@ import AddNewUserCard from "@/components/add-new-user-card";
 import CustomModel from "@/components/CustomModel";
 import { initialModelInfo, initialUserData, MODEL_STATE, userFormInputs } from "@/util/user-helper";
 import { createContext, useEffect, useState } from "react";
-import { addNewUser, getAllUsers, updateUser } from "@/actions/user-management"
+import { addNewUser, deleteUser, getAllUsers, updateUser } from "@/actions/user-management"
 import SingleUserCard from "@/components/Single-user-card";
 
 export const UserContext = createContext(null);
@@ -53,7 +53,14 @@ export default function UserManagementPage() {
         }
     }
 
-    return <UserContext.Provider value={{ userData, modelInfo, setModelInfo, setUserData, userFormInputs, setOpenModel, modelDataSubmit }}>
+    async function deleteSingleUser(id) {
+        const result = await deleteUser(id);
+        console.log(result);
+        fetchUsers();
+
+    }
+
+    return <UserContext.Provider value={{ userData, modelInfo, setModelInfo, setUserData, userFormInputs, setOpenModel, modelDataSubmit, deleteSingleUser }}>
         <section className="w-[90%] mx-auto flex flex-col gap-4">
 
             <section className="mt-4 flex justify-between">
