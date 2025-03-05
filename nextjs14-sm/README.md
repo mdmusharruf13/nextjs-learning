@@ -751,7 +751,7 @@ Server Actions are **asynchronous functions** that are executed on the server. T
 
 Instead of fetching data in client component try to fetch the data in server component and export it.
 
-### Connecting to DB multiple times ERROR
+### **Connecting to DB multiple times ERROR**
 
 MongooseError: Can't call `openUri()` on an active connection with different connection strings. Make sure you aren't calling `mongoose.connect()` multiple times.  
 When you connect to Database then disconnect.
@@ -765,3 +765,27 @@ try {
   mongoose.disconnect();
 }
 ```
+
+### **Fetching Data In Server Component and Passing to Client Component**
+
+When you fetch some data from database(mongodb) and send that data to client component one error raises.
+
+**"Only plain objects can be passed to Client Components from Server Components. Objects with _toJSON_ methods are not supported. Convert it manually to a simple value before passing it to props."**
+
+The error **Only plain objects can be passed to Clinet Components from Server Components** occurs because **MongoDB's _\_id_ field is a _BSON ObjectId_**, which is not a plain JavaScript object. This causes issues when passing it as a prop to a Client Component in Next.js (Server-Client boundary issue).
+
+- **Solution: Convert MongoDB ObjectId to a String**:
+  Before passing data to Client Component, **manually convert _\_id_ to a string**.
+
+  ```js
+  const users = await User.find({});
+
+  const plainUsers = users.map((user) => ({
+    ...user.toObject(),
+    _id: user._id.toString(),
+  }));
+
+  return plainUsers;
+  ```
+
+- **See my code** [click here](/src/actions/user-management.js)
