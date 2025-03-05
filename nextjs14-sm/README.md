@@ -750,3 +750,18 @@ Server Actions are **asynchronous functions** that are executed on the server. T
   ```
 
 Instead of fetching data in client component try to fetch the data in server component and export it.
+
+### Connecting to DB multiple times ERROR
+
+MongooseError: Can't call `openUri()` on an active connection with different connection strings. Make sure you aren't calling `mongoose.connect()` multiple times.  
+When you connect to Database then disconnect.
+
+```js
+try {
+  await mongoose.connect();
+} catch (error) {
+  console.log(error);
+} finally {
+  mongoose.disconnect();
+}
+```
