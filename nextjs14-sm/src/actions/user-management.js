@@ -76,3 +76,25 @@ export async function updateUser(userData) {
         }
     }
 }
+
+export async function deleteUser(id) {
+    try {
+        const deletedUser = await User.findByIdAndDelete(id);
+        if (deletedUser) {
+            return {
+                success: true,
+                message: "user deleted successfully",
+            }
+        }
+
+        return {
+            success: false,
+            message: "something went wrong please try again later"
+        }
+    } catch (err) {
+        return {
+            success: false,
+            message: "something went wrong please try again later"
+        }
+    }
+}
