@@ -1,5 +1,6 @@
 "use client";
 
+import { registerNewUser } from "@/actions/auth-user";
 import Button from "@/components/Button";
 import { initialSignInFormInputs, initialSignInUserInfo } from "@/util/user-helper";
 import { useState } from "react";
@@ -7,9 +8,11 @@ import { useState } from "react";
 export default function SignUpPage() {
     const [userData, setUserData] = useState(initialSignInUserInfo);
 
-    const handleSignInFormSubmission = (e) => {
+    const handleSignInFormSubmission = async (e) => {
         e.preventDefault();
         console.log(userData);
+        const result = await registerNewUser(userData);
+        console.log("result is ", result);
         setUserData(initialSignInUserInfo);
     }
 
