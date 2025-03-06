@@ -7,13 +7,13 @@ export const initialUserData = {
 
 export const userFormInputs = [
     {
-        type: "input",
+        type: "text",
         name: "firstName",
         placeholder: 'Enter first name',
         label: "First Name"
     },
     {
-        type: "input",
+        type: "text",
         name: "lastName",
         placeholder: 'Enter last name',
         label: "Last Name"
@@ -25,7 +25,7 @@ export const userFormInputs = [
         label: "Email"
     },
     {
-        type: "input",
+        type: "text",
         name: "address",
         placeholder: 'Enter your address',
         label: "Address"
@@ -47,3 +47,30 @@ export const MODEL_STATE = {
         btnLabel: "Save Changes"
     }
 }
+
+export const initialSignInUserInfo = {
+    userName: '',
+    email: '',
+    password: ''
+};
+
+export const initialSignInFormInputs = [
+    {
+        type: 'input',
+        name: 'userName',
+        placeholder: 'Enter user name',
+        label: 'UserName'
+    },
+    {
+        type: 'email',
+        name: 'email',
+        placeholder: 'Enter your email',
+        label: 'Email'
+    },
+    {
+        type: 'password',
+        name: 'password',
+        placeholder: 'Enter password',
+        label: 'Password'
+    }
+]
