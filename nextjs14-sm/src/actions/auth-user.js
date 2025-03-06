@@ -1,12 +1,17 @@
+"use server";
+
 import connectToDB from "@/database/blogdb";
+import AuthUsers from "@/model/authUser";
+import bcrypt from "bcryptjs";
 
 export async function registerNewUser(formData) {
     try {
         await connectToDB();
 
         const { userName, email, password } = formData;
+        console.log("server log: ", formData)
 
-        let user = await noSchemaPleaseCreateFirst.findOne({ email });
+        let user = await AuthUsers.findOne({ email });
         if (user) {
             return {
                 success: false,
@@ -14,11 +19,10 @@ export async function registerNewUser(formData) {
             }
         }
 
-        // install bcrypths package
-        const salt = bcryptjs.genSalt(10);
-        const hashPswd = await bcryptjs.hash(password, salt);
+        const salt = await bcrypt.genSalt(10);
+        const hashPswd = await bcrypt.hash(password, salt);
 
-        const newlyCreatedUser = new User({
+        const newlyCreatedUser = new AuthUsers({
             userName, email, password: hashPswd
         });
 
@@ -26,7 +30,7 @@ export async function registerNewUser(formData) {
 
         if (savedUser) {
             return {
-                success: trye,
+                success: true,
                 data: JSON.parse(JSON.stringify(savedUser))
             }
         }
@@ -35,8 +39,6 @@ export async function registerNewUser(formData) {
             success: false,
             message: "User already exists! Please try with different email"
         }
-
-
 
     } catch (err) {
         console.log(err);
