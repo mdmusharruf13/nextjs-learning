@@ -74,3 +74,23 @@ export const initialSignInFormInputs = [
         label: 'Password'
     }
 ]
+
+export const initialLogInUserInfo = {
+    email: '',
+    password: ''
+}
+
+export const initialLogInFormInputs = [
+    {
+        type: 'email',
+        name: 'email',
+        placeholder: 'Enter your email',
+        label: 'Email'
+    },
+    {
+        type: 'password',
+        name: 'password',
+        placeholder: 'Enter password',
+        label: 'Password'
+    }
+]
