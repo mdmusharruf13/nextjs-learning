@@ -14,9 +14,13 @@ export default function Home() {
       <Link href={"projects"}>Navigate to Projects page</Link>
       <Link href={"/about"}>Navigate to About us page</Link>
 
-      <button className="font-bold mt-23 text-lg" onClick={() => router.push("/projects")}>Alternative way of navigating</button>
+      <button className="font-bold mt-23 text-lg border border-black rounded-sm p-1" onClick={() => router.push("/projects")}>Alternative way of navigating</button>
 
-      <Button onClick={() => router.push("project-list/blog/blog-home")}>Go to Blog Project</Button>
+      <section className="mt-4 flex flex-col justify-center gap-4">
+        <Button onClick={() => router.push("project-list/blog/blog-home")}>Go to Blog Project</Button>
+        <Button onClick={() => router.push('/project-list/user-management')}>Go to User Management Project</Button>
+        <Button onClick={() => router.push("/project-list/auth-user")}>Go to Auth Project</Button>
+      </section>
     </section>
   </main>
 }
