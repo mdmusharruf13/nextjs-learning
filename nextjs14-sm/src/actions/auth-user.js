@@ -60,28 +60,31 @@ export async function loginUser(formData) {
         if (!user) {
             return {
                 success: false,
-                message: "user does not exist! please sign up"
+                message: "user does not exist! please sign up",
+                newUser: true
             }
         }
 
-        const checkPswd = bcrypt.compare(password, user.password);
+        const checkPswd = await bcrypt.compare(password, user.password);
         if (!checkPswd) {
             return {
                 success: false,
-                message: "Password is incorrect please check"
+                message: "Password is incorrect please check",
+                incorrectPassword: true
             }
         }
 
-        // const createdTokenData = {
-        //     id: user._id,
-        //     userName: user.userName,
-        //     email: user.email
-        // };
+        const createdTokenData = {
+            id: user._id,
+            userName: user.userName,
+            email: user.email
+        };
 
-        // const token = jwt.sign(createdTokenData, 'DEFAULT_KEY', { expiresIn: '1d' })
+        const token = jwt.sign(createdTokenData, 'DEFAULT_KEY', { expiresIn: '1d' })
 
-        // const getCookies = cookies();
-        // getCookies.set("token", token);
+        const getCookies = await cookies();
+        getCookies.set("token", token);
+        console.log("cookie is : ", getCookies.get('token'));
 
         return {
             success: true,
