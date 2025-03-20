@@ -3,18 +3,27 @@
 import { loginUser } from "@/actions/auth-user";
 import Button from "@/components/Button";
 import { initialLogInFormInputs, initialLogInUserInfo } from "@/util/user-helper";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignInPage() {
     const [userData, setUserData] = useState(initialLogInUserInfo);
+    const router = useRouter();
 
     const handleUserLogin = async (e) => {
         e.preventDefault();
+
         const loginResult = await loginUser(userData);
-        console.log("userData", userData, "loginResult", loginResult);
+
+        if (loginResult?.newUser) {
+            router.push("/project-list/auth-user/sign-up");
+        }
+
         setUserData(initialLogInUserInfo);
 
-
+        if (loginResult?.success) {
+            router.refresh();
+        }
     }
     return <section className="h-screen bg-gradient-to-r from-orange-400 to-gray-400 pt-16">
         <section className="w-[500px] h-[500px] mx-auto bg-gray-200 flex flex-col justify-center items-center gap-8 rounded-md">
