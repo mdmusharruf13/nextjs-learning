@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  console.log(router);
 
   return <main>
     <section className="flex min-h-screen flex-col items-center p-24">

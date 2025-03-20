@@ -3,16 +3,18 @@
 import { registerNewUser } from "@/actions/auth-user";
 import Button from "@/components/Button";
 import { initialSignInFormInputs, initialSignInUserInfo } from "@/util/user-helper";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignUpPage() {
     const [userData, setUserData] = useState(initialSignInUserInfo);
+    const router = useRouter();
 
     const handleSignInFormSubmission = async (e) => {
         e.preventDefault();
-        console.log(userData);
         const result = await registerNewUser(userData);
-        console.log("result is ", result);
+        if (result.success) router.push("/project-list/auth-user/sign-in");
+        else alert("User Exist | Please try with different email...");
         setUserData(initialSignInUserInfo);
     }
 
