@@ -1,19 +1,38 @@
 "use client";
 
+import { fetchAuthUser, logoutUser } from "@/actions/auth-user";
 import Button from "@/components/Button";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AuthUserPage() {
-    const router = useRouter();
-    const pathName = usePathname();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        async function fetchUser() {
+            const userInfo = await fetchAuthUser();
+            if (userInfo?.success) {
+                setUser(userInfo.data);
+            }
+        }
+        fetchUser();
+    }, []);
+
+    async function handleLogout() {
+        const logout = await logoutUser();
+        if (logout?.success) {
+            setUser(null);
+        }
+    }
 
     return (
         <section className="m-4">
             <h1 className="text-xl font-bold">Auth User Page</h1>
-            <section className="flex gap-4 mt-4">
-                <Button onClick={() => router.push(`${pathName}/sign-up`)}>Go to SignUp Page</Button>
-                <Button onClick={() => router.push(`${pathName}/sign-in`)}>Go to Login Page</Button>
+            {user ? <section>
+                <p>username:{user?.userName}</p>
+                <p>email:{user?.email}</p>
+                <Button onClick={handleLogout}>Logout</Button>
             </section>
+                : <p>Not loggedIn | please login...</p>}
         </section>
     )
 }

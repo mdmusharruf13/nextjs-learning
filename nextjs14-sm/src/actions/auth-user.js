@@ -98,3 +98,56 @@ export async function loginUser(formData) {
         }
     }
 }
+
+export async function fetchAuthUser() {
+    try {
+        await connectToDB();
+
+
+        const cookiesList = await cookies();
+        const token = cookiesList.get("token")?.value || "";
+
+        if (token == "") {
+            return {
+                success: false,
+                messge: "Token is invalid"
+            }
+        }
+
+        const decodedToken = jwt.verify(token, 'DEFAULT_KEY');
+        const getUserInfo = await AuthUsers.findOne({ _id: decodedToken.id });
+
+        if (getUserInfo) {
+
+            return {
+                success: true,
+                message: "successfully fetched user data",
+                data: JSON.parse(JSON.stringify(getUserInfo))
+            }
+        } else {
+            return {
+                success: false,
+                message: "Some error occured ! Please try again"
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export async function logoutUser() {
+    const cookiesList = await cookies();
+    cookiesList.delete("token");
+    console.log(cookiesList.get("token")?.value, " is token");
+    if (!cookiesList.get("token")?.value) {
+        return {
+            success: true,
+            message: "logout successful"
+        }
+    } else {
+        return {
+            success: false,
+            message: "failed to logout | please try again"
+        }
+    }
+}
