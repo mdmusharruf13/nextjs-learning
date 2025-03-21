@@ -24,5 +24,6 @@ export async function middleware(request) {
 export const config = {
     matcher: [
         "/project-list/auth-user/sign-in",
+        "/project-list/auth-user/sign-up"
     ]
 };

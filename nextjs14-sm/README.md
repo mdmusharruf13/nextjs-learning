@@ -789,3 +789,134 @@ The error **Only plain objects can be passed to Clinet Components from Server Co
   ```
 
 - **See my code** [click here](/src/actions/user-management.js)
+
+### Auth Project
+
+Server Action for Registering new user and hashing password and storing in Database.
+
+```js
+"use server";
+
+import connectToDB from "@/database/blogdb";
+import AuthUsers from "@/model/authUser";
+import bcrypt from "bcryptjs";
+
+export async function registerNewUser(formData) {
+    try {
+        await connectToDB();
+
+        const { userName, email, password } = formData;
+        console.log("server log: ", formData)
+
+        let user = await AuthUsers.findOne({ email });
+        if (user) {
+            return { ... } // user already exist
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPswd = await bcrypt.hash(password, salt);
+
+        const newlyCreatedUser = new AuthUsers({
+            userName, email, password: hashPswd
+        });
+
+        const savedUser = await newlyCreatedUser.save();
+
+        if (savedUser) {
+            return {
+                success: true,
+                data: JSON.parse(JSON.stringify(savedUser))
+            }
+        }
+
+        return { ... }  // user already exist
+
+    } catch (err) { ... } // error something went wrong
+}
+
+```
+
+Server Action for login user fetching user details from database and comparing password.
+
+```js
+export async function loginUser(formData) {
+    await connectToDB();
+    try {
+        const { email, password } = formData;
+
+        const user = await AuthUsers.findOne({ email });
+        if (!user) {
+            return { ... }  // user does not exist
+        }
+
+        const checkPswd = await bcrypt.compare(password, user.password);
+        if (!checkPswd) {
+            return { ... }  // incorrect password
+        }
+
+        const createdTokenData = {
+            id: user._id,
+            userName: user.userName,
+            email: user.email
+        };
+
+        const token = jwt.sign(createdTokenData, 'DEFAULT_KEY', { expiresIn: '1d' })
+
+        const getCookies = await cookies();
+        getCookies.set("token", token);
+        console.log("cookie is : ", getCookies.get('token'));
+
+        return { ... }  // login successful
+    } catch (err) {
+        console.log(err);
+        return { ... }  // user does not exist
+    }
+}
+```
+
+### Middleware
+
+Middleware allows you to run code before a request is completed. Then, based on the incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly.
+
+Middleware runs before cahced content and routes are matched.
+
+Use Cases
+
+- Authentication and Authorization.
+- Server-Side Redirects.
+- Bot Detection.
+
+**Note**: While only one **middleware.js** file is supported per project.
+
+```js
+import { NextResponse } from "next/server";
+
+export async function middleware(request) {
+  const path = request.nextUrl.pathname;
+  const checkPublicPath =
+    path === "/project-list/auth-user/sign-in" ||
+    path === "/project-list/auth-user/sign-up";
+
+  const token = request.cookies.get("token")?.value || "";
+  console.log("middleware token: ", token);
+
+  if (checkPublicPath && token !== "") {
+    return NextResponse.redirect(
+      new URL("/project-list/auth-user", request.nextUrl)
+    );
+  }
+
+  if (!checkPublicPath && token === "") {
+    return NextResponse.redirect(
+      new URL("/project-list/auth-user/sign-up", request.nextUrl)
+    );
+  }
+}
+
+export const config = {
+  matcher: [
+    "/project-list/auth-user/sign-in",
+    "/project-list/auth-user/sign-up",
+  ],
+};
+```
