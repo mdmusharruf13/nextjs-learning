@@ -15,3 +15,40 @@ URLs you can access in your browser are determined by how you organize your file
 3. Each folder represents a segment of the URL path.
 
 When these conventions are followed, the file automatically becomes available as a route.
+
+## React Server Components (RSC)
+
+- Server Components
+- Client Components
+
+### Server Components
+
+- By default, Next.js treats all components as Server components.
+
+- The components can perform server-side tasks like reading files or fetching data directly from a database.
+
+- The trade-off is that they can't use React hooks or handle user interactions.
+
+```js
+export default async function ServerPage() {
+  const userData = await fetchUsers();
+
+  return <section> ... </section>;
+}
+```
+
+### Client Components
+
+- To create a Client component, you'll need to add the "use client" directive at the top of your component file.
+
+- While Client components can't perform server-side tasks like reading files, they can use hooks and handle user interactions.
+
+```js
+"use client";
+import { useState } from "react";
+
+export default async function ClientPage() {
+  const [users, setUser] = useState([]);
+  return <section> ... </section>;
+}
+```
