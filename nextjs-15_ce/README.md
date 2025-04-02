@@ -52,3 +52,29 @@ export default async function ClientPage() {
   return <section> ... </section>;
 }
 ```
+
+### Nested Routes
+
+Nested routes are a way to create a hierarchy of routes in your appliation.
+
+```js
+app
+|_____blog
+|     |_____first
+|     |     |-----page.tsx
+|     |_____second
+|     |     |-----page.tsx
+|     |-----page.tsx
+|-----layout.tsx
+|-----page.tsx
+
+
+// all paths are
+localhost:3000/
+
+localhost:3000/blog
+
+localhost:3000/blog/first
+
+localhost:3000/blog/second
+```
