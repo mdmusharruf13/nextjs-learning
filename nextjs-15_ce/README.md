@@ -78,3 +78,42 @@ localhost:3000/blog/first
 
 localhost:3000/blog/second
 ```
+
+### Dynamic and Nested Dynamic Route
+
+```js
+app
+|_____product
+|     |_____[productId]   // dynamic route
+|     |     |_____review
+|     |     |     |_____[reviewId]   // nested dynamic route
+|     |     |     |     |-----page.tsx
+|     |     |     |-----page.tsx
+|     |     |-----page.tsx
+|     |-----page.tsx
+|-----layout.tsx
+|-----page.tsx
+
+
+// paths are
+localhost:3000/product/352
+
+localhost:3000/product/122/review/4
+```
+
+Practical Example
+```js
+export default async function ReviewIdPage({params}: {
+    params: Promise<{ productId: string, reviewId: string }>
+}) {
+    const {productId, reviewId} = await params;
+
+    return (
+        <section>
+            <p>review {reviewId} product {productId}</p>
+        </section>
+    )
+}
+```
+
+This is server component, because `async` keyword can only be used with server component but not client component.
