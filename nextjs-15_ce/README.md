@@ -204,5 +204,42 @@ export default function NotFoundPage() {
         <h2>Review {reviewId} not found for product {productId}</h2>
     </section>
 }
-
 ```
+
+
+### Private folder
+
+Using underscore(_) before the folder name will be considered as private folder.
+
+Private folder are super useful for a bunch of things:
+ - Keeping your UI logic seperate from routing logic.
+ - Having a consistent way to organize internal files in your project.
+ - Making it easier to group related files in your code editor.
+ - Avoiding potential naming conflicts with future Next.js file naming conventions.
+
+
+### Rotue Group
+
+**Route Group** prevent folder from being included in the route's URL path.
+
+This allows you to organize your route segments and project files into logical groups without affecting the URL path structure.
+
+A route group can be created by wrapping a folder's name in parenthesis: (**folderName**).
+
+Route groups are useful for organizing routes into groups e.g. by site section, intent, or team.
+
+```js
+app/
+|_____(shop)/
+|     |-----layout.tsx
+|     |_____checkout/           //-> /checkout
+|     |     |-----page.tsx
+|     |_____cart/               //-> /cart
+|     |     |-----page.tsx
+|_____account/                 //-> /account
+|     |-----page.tsx
+```
+
+Even though the `checkout` and `cart` folders are nested inside `shop` folder, but they are available at root level as the `shop` folder is **Group Route** it is exculded from the routing.
+
+All possible routes are `/checkout`, `/cart`, and `/account`.
