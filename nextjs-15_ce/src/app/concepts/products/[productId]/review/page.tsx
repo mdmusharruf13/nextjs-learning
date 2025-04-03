@@ -3,7 +3,7 @@
 import { use } from "react";
 
 export default function ReviewPage({params}: {
-    params: Promise<{productId: string}>
+    params: Promise<{productId: number}>
 }) {
 
     const {productId} = use(params);

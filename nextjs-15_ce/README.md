@@ -188,3 +188,21 @@ export default async function Reviews({params}: {
     </section>
 }
 ```
+
+
+### not-found page 
+
+not-found page does not accept props.
+
+```js
+export default function NotFoundPage() {
+    const pathName = usePathname();
+    const productId = pathname.split("/")[2];
+    const reviewId = pathname.split("/")[4];
+
+    return <section>
+        <h2>Review {reviewId} not found for product {productId}</h2>
+    </section>
+}
+
+```
