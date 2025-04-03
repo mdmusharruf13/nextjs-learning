@@ -117,3 +117,19 @@ export default async function ReviewIdPage({params}: {
 ```
 
 This is server component, because `async` keyword can only be used with server component but not client component.
+
+
+### Catch-All Route
+A Catch-All route in Next.js is used to match any number of URL segments for a specific route.
+
+```js
+app
+|_____docs
+|     |_____[...slug]
+|     |     |-----page.tsx
+|     |-----page.tsx
+|-----layout.tsx
+|-----page.tsx
+```
+
+Any route after `/docs` URL segment will always display only `/docs/[...slug]/page.tsx` file. 
