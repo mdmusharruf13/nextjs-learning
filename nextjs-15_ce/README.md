@@ -257,3 +257,23 @@ You can define multiple layouts for different pages.
 
 [see layout example](/src/app/layout.tsx)
 
+If you want multiple root layout then remove root layout from the root directory and add in every first level nested directory (this can be achieved using **Route Group**).
+
+
+```js
+app/
+|_____(auth)/
+|     |-----layout.tsx
+|     |_____login/
+|     |     |-----page.tsx
+|     |_____signup/
+|     |     |-----page.tsx
+|-----page.tsx
+|_____(product)/
+|     |-----layout.tsx
+|     |_____checkout/
+|     |     |-----page.tsx
+|     |_____cart/
+|     |     |-----page.tsx
+|-----page.tsx
+```
