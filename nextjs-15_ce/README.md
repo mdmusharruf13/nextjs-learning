@@ -243,3 +243,17 @@ app/
 Even though the `checkout` and `cart` folders are nested inside `shop` folder, but they are available at root level as the `shop` folder is **Group Route** it is exculded from the routing.
 
 All possible routes are `/checkout`, `/cart`, and `/account`.
+
+
+### Layout
+
+Pages are route-specific UI components.
+
+A Layout is UI that is shared between multiple pages. On navigation, layouts preserve state, remain interactive, and do not rerender. 
+
+You can define a layout by default exporting a React component from a **layout file**. The component should accept a **children** prop which can be a page or another **layout**.
+
+You can define multiple layouts for different pages.
+
+[see layout example](/src/app/layout.tsx)
+
