@@ -277,3 +277,52 @@ app/
 |     |     |-----page.tsx
 |-----page.tsx
 ```
+
+
+### Routing metadata
+
+The Metadata API in Next.js is a powerful fetaure that lets us define metadata for each page.
+
+Metadata ensures our content looks great when it's shared or indexed by search engines.
+
+Two ways to handle metadata in layout.tsx or page.tsx files:
+  - export a static **metadata** object.
+  - export a dynamic **generateMetadata** function.
+
+
+### Configuring metadata
+
+**Metadata rules :**
+  - Both layout.tsx and page.tsx can export metadata. Layout metadata applies to all its pages, while page metadata is specific to that page.
+
+  - Metadata follows a top-down order, starting from the root level.
+
+  - When metadata exist in multiple places along a route, they merge together, with page metadata overriding layout metadata for matching properties.
+
+
+```js
+import { Metadata } from "next";
+
+// static metadata
+export const metadata: Metadata = {
+  title: "About page"
+}
+
+
+// dynamic metadata
+export const generateMetadata = async ({params} : {
+    params: Promise<{ productId: string}>
+}):  Promise<Metadata> => {
+  const id = (await params).productId;
+
+  return {
+    title: `product ${id}`
+  }
+}
+```
+
+**Note:** It will not work in the pages that is marked as "use client". If you try to use it then you will get below error.
+
+```js
+Error: You are attempting to export "generateMetadata" from a component marked "use client", which is disallowed. Either remove the export, or the "use client" directive.
+```
