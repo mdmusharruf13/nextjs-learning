@@ -1,16 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
+import Loading from "../../loading";
 
 export default function ReviewPage({params}: {
     params: Promise<{productId: number}>
 }) {
 
+    const [loading, setLoading] = useState(true);
     const {productId} = use(params);
     const router = useRouter();
 
     useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        
         if(productId > 100) {
             const timer = setTimeout(() => {
                 router.push("/concepts/products");
@@ -19,6 +25,10 @@ export default function ReviewPage({params}: {
             return () => clearTimeout(timer);
         }
     },[]);
+
+    if(loading) {
+        return <Loading />
+    }
 
     return (
         <section>

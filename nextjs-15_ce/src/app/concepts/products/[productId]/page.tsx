@@ -6,6 +6,13 @@ type productIdParams = {
 };
 
 export default async function ProductIdPage({ params }: productIdParams) {
+  
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("loaded successfully!!");
+    }, 1000);
+  });
+
   const { productId } = await params;
 
   if(productId > 100) redirect("/concepts/products");

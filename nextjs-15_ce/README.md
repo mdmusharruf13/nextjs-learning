@@ -476,3 +476,96 @@ export default async function ReviewIdPage({params}: {
 `setTimeout` doesn't  work in server components - `redirect()` and `notFound()` are special Next.js functions and must be used synchronously.
 
 You can't call both `redirect()` and `notFound()` - only one should be triggered; calling both is not valid.
+
+
+### Template Files
+Layouts only Mounts the new page content while keeping the common element intact they don't remounts shared components which leads to better performance.
+
+This could be useful for scenarios like implementing enter or exit animations or running useEffect hooks when routes changes.
+
+This is where template files come in handy as an alternative to layout files.
+
+Templates are similar to layouts in that they are also UI shared between multiple pages in you app.
+
+Whenever a user navigates between routes sharing a template, you get a completely fresh start.
+  - a new templete component instance is mounted.
+  - DOM elements are recreated.
+  - state is cleared.
+  - effects are re-synchronized.
+
+**Templates**
+
+Create a template by exporting a default React component from a **template.js** or **template.tsx** file.
+
+Like layouts, templates need to accept a children prop to render the nested route segments.
+
+By default, `template` is a Server Component, but can also be used as a Client Component through `"use client"` directive.
+
+
+### loading.tsx
+
+This file helps us create loading states that users see while waiting for content to load in a specific route segment.
+
+The loading states appear instantly when navigating, letting users know that the application is responsive and actively loading content.
+
+Creating `loading.tsx` file is similar to `not-found.tsx`, `layout.tsx`, `template.tsx`.
+
+**loading.tsx benfits :**
+  1. It gives users immediate feedback when they navigate somewhere new. This makes your app feel snappy and responsive, and users know their click actually did something.
+
+  2. Next.js keeps shared layouts interactive while new content loads. User can still use things like navigation menus or sidebars even if the main content isn't ready yet.
+
+
+**loading.tsx file**
+```js
+export default function Loading() {
+    return (
+        <section>
+            <h1>loading...</h1>
+        </section>
+    )
+}
+```
+
+**Showing loading.tsx file in Server Component**
+```js
+export default async function Products() {  
+  const data = await fetch('https://api.com').then(res => res.json());
+  
+  return <section>product id: {data.title}</section>;
+}
+```
+
+**Result** When user navigates to product page `/products`, `loading.tsx` shows while the server fetch runs and the page renders.
+
+**You don't need to manually import or handle anything. Next.js shows it automatically if the server component is async.**
+
+**`loading.tsx` Does NOT work automatically in Client Component**
+
+If your page/component is a **client component** and you're fetching using `useEffect()`, then `loading.tsx` is **ignored**.
+
+[see my code](/src/app/concepts/products/[productId]/review/page.tsx)
+
+```js
+"use client";
+
+import { useState, useEffect } from "react";
+
+export default function Products() {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(json => {
+        setData(json);
+        setLoading(false);
+      })
+  }, []);
+
+  if(loading) return <p>loading...</p>;
+
+  return <div>{data.title}</div>;
+}
+```
