@@ -326,3 +326,19 @@ export const generateMetadata = async ({params} : {
 ```js
 Error: You are attempting to export "generateMetadata" from a component marked "use client", which is disallowed. Either remove the export, or the "use client" directive.
 ```
+
+
+### Link component navigation
+
+For client-side navigation, Next.js gives us the <Link> component.
+
+The `<Link>` component is a React component that extends the HTML `<a>` element, and it's the primary way to navigate between routes in Next.js.
+
+To use it, you have to import if from "next/link".
+
+```js
+import Link from "next/link";
+
+<Link href="path">home</Link>
+
+```
