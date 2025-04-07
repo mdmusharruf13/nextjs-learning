@@ -342,3 +342,48 @@ import Link from "next/link";
 <Link href="path">home</Link>
 
 ```
+
+
+### params and searchParams
+
+For a given URL,
+
+**params** is a promise that resolves to an object containing the dynamic route parameters (like `id`).
+
+**searchParams** is a promise that resolves to an object containing the query parameters (like `filters` and `sorting`).
+
+
+**Example for Client Component**
+```js
+"use client";
+
+import { use } from "react";
+import Link from "next/link";
+
+export default function ArticlePage({params, searchParams} : {
+  params: Promise<{ articleId: string }>,
+  searchParams: Promise<{ lang: "en" | "es" | "fr" }>
+}) {
+
+  const { articleId } = use(params);
+  const { lang = "en" } = use(searchParmas);
+
+  return (
+    <section>
+      <h1>News article {articleId}</h1>
+      <p>Reading in {lang}</p>
+
+      <section>
+        <Link href={`articles/${articleId}?lang=en`}>English</Link>
+        <Link href={`articles/${articleId}?lang=es`}>Spanish</Link>
+        <Link href={`articles/${articleId}?lang=fr`}>French</Link>
+      </section>
+    </section>
+  )
+}
+```
+
+**Example for Server Component [link to code](/src/app/concepts/articles/[articleId]/page.tsx)**
+
+
+**Note :** While page.tsx has access to both params and searchParams, layout.tsx has access to params.
