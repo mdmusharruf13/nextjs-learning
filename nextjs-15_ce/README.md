@@ -387,3 +387,92 @@ export default function ArticlePage({params, searchParams} : {
 
 
 **Note :** While page.tsx has access to both params and searchParams, layout.tsx has access to params.
+
+
+### Navigation using `useRouter()` and `redirect()`:
+
+`useRouter()` is a hook provided by Next.js for navigating in client components.
+
+`redirect()` is a method provided by Next.js for navigating in server components.
+
+You cannot use both in a single component. 
+
+**Navigation in Client Component**
+```js
+"use client";
+
+import { useRouter } from "next/navigation";
+import { use, useEffect } from "react";
+
+export default function ReviewPage({params}: {
+    params: Promise<{productId: number}>
+}) {
+
+    const {productId} = use(params);
+    const router = useRouter();
+
+    useEffect(() => {
+        if(productId > 100) {
+            const timer = setTimeout(() => {
+                router.push("/concepts/products");
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    },[]);
+
+    return (
+        <section>
+            <h1>this is review page with product id: {productId}</h1>
+            {productId > 100 ? <p>Product Id should be less than 100. Redirecting to Product page</p>: null}
+        </section>
+    )
+}
+```
+
+**Navigation in Server Component**
+```js
+import { redirect } from "next/navigation";
+
+type productIdParams = {
+  params: Promise<{ productId: number }>;
+};
+
+export default async function ProductIdPage({ params }: productIdParams) {
+  const { productId } = await params;
+
+  if(productId > 100) redirect("/concepts/products");
+  
+  return <section>product id: {productId}</section>;
+}
+```
+
+### Problem-and-Solution
+```js
+import { notFound, redirect } from "next/navigation";
+
+export default async function ReviewIdPage({params}: {
+    params: Promise<{ productId: number, reviewId: string }>
+}) {
+    const {productId, reviewId} = await params;
+
+    if(productId > 100) {
+        setTimeout(() => {
+            redirect("/concepts/products");
+        }, 3000);
+
+        notFound();
+
+    }
+
+    return (
+        <section>
+            <p>review {reviewId} for product {productId}</p>
+        </section>
+    )
+}
+```
+
+`setTimeout` doesn't  work in server components - `redirect()` and `notFound()` are special Next.js functions and must be used synchronously.
+
+You can't call both `redirect()` and `notFound()` - only one should be triggered; calling both is not valid.
