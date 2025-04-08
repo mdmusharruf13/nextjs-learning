@@ -569,3 +569,95 @@ export default function Products() {
   return <div>{data.title}</div>;
 }
 ```
+
+### Error.tsx
+
+An **error** file allows you to handle unexpected runtime errors and display fallback UI.
+
+It automatically wraps route segments and their nested children in a React Error Boundary.
+
+You can create custom error UIs for specific segments using the file-system hierarchy.
+
+It isolates errors to affected segments while keeping the rest of your app functional.
+
+It enables you to attempt to recover from an error without requiring a full page reload.
+
+### Props in error.js
+
+`error`
+  - An instance of `Error` object forwarded to the `error.js` Client Component.
+
+`error.message`:
+  - Error forwarded from Client Components show the original `Error` message.
+
+  - Error forwarded from Server Components show a generic message with an identifier. This is to prevent leaking sensitive details. You can use the identifier, under `error.digest`, to match the corresponding server-side logs.
+
+`error.digest`
+  - An automatically generated hash of the error thrown. It can be used to match the corresponding error in server-side logs.
+
+`reset`
+  - The cause of an error can sometimes be temporary. In these cases, trying again might resolve the issue.
+
+  - An error component can use the `reset()` function to prompt the user to attempt to recover from the error. When executed, the function will try to re-render the error boundary's contents. If successful, the fallback error component is replaced with the result of the re-render.
+
+[see my code](/src/app/concepts/docs/[...slug]/error.tsx)
+
+```js
+"use client";  // Error boundaries must be Client Components
+
+export default function Error({ error, reset } : {
+  error: Error,
+  reset: () => void,
+}) {
+  return (
+    <div>
+      <h2>something went wrong!</h2>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  )
+}
+```
+
+### Handling errors in Nested routes
+
+Errors always bubble up to find the closet parent error boundary.
+
+An error.tsx handles error not just for its own folder, but for all the nested child segments below it too.
+
+By strategically placing error.tsx files at different levels in your route folders, you can control exactly how detailed your error handling gets.
+
+Where you put your error.tsx file make a huge difference - it determines exactly which parts of your UI get affected when things go wrong.
+
+
+### Handling errors in layouts
+
+An error.tsx file will handle errors for all its nested child segments.
+
+There's an interesting catch with layout.tsx component in the same segment.
+
+The error boundary won't catch errors thrown in the layout.tsx within the same segment because of how the component hierarchy works.
+
+The layout actually sits above the error boundary in the component tree.
+
+```js
+app/
+|-----layout.tsx
+|-----template.tsx
+|-----error.tsx
+|-----loading.tsx
+|-----not-found.tsx
+|-----page.tsx
+
+
+<Layout>
+    <Template>
+        <ErrorBoundary fallback={<Error />} >
+            <Suspense fallback={<Loading />}>
+                <ErrorBoundary fallback={<NotFound />}>
+                    <Page />
+                </ErrorBoundary>
+            </Suspense>
+        </ErrorBoundary>
+    </Template>
+</Layout>
+```
