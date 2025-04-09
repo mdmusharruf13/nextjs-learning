@@ -661,3 +661,35 @@ app/
     </Template>
 </Layout>
 ```
+
+### Handling global errors
+
+If an error boundary can't catch errors in the layout.tsx fie from the same segment, what about errors in the root laout?
+
+It does'nt have a parent segment - how do we handle those errors?
+
+Next.js provides a special file called **global-error.tsx** that goes in your root app directory.
+
+This is your last line of defense when something goes catastrophically wrong at the highest level of your app.
+
+The **global-error.tsx** file is only shown in production mode, in developement mode you will see the default error instead.
+
+Global error UI must defines its own `<html>` and `<body>` tags.
+
+```js
+"use client";
+
+export default function GlobalError({error, reset} : {
+  error: Error,
+  reset: () => void
+}) {
+  return (
+    <html>
+      <body>
+        <h2>Something went wrong</h2>
+        <button onClick={() => reset()}>Try again</button>
+      </body>
+    </html>
+  )
+}
+```
