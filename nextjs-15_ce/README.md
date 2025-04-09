@@ -732,3 +732,91 @@ dashboard/
 |_____@users/
 |     |-----page.tsx
 ```
+
+
+### Unmatched routes
+
+Navigation from the UI
+  - When navigating through the UI (like clicking links), Next.js keeps showing whatever was in the unmatched slots before.
+
+Page reload
+  - Next.js looks for a `default.tsx` file in each unmatched slot.
+  - This file is critical as it serves as a fallback to render content when the framework cannot retrieve a slot's active state from the current URL.
+  - Without the file, you'll get 404 error.
+
+
+```js
+dashboard/
+|_____@notifications/
+|     |_____archived/
+|     |     |-----page.tsx
+|     |-----page.tsx
+|
+|_____@revenue/
+|     |-----page.tsx
+|
+|_____@users/
+|     |-----page.tsx
+|
+|-----layout.tsx
+|-----page.tsx
+```
+
+When you navigate between `notification` page and `archived` page the URL segments changes, after that if you refresh browser you will get 404 page. Because this requires a `default.tsx` file to **handle unmatched routes**.
+
+
+**create default.tsx files**
+```js
+dashboard/
+|_____@notifications/
+|     |_____archived/
+|     |     |-----page.tsx
+|     |-----page.tsx
+|
+|_____@revenue/
+|     |-----page.tsx
+|     |-----default.tsx
+|
+|_____@users/
+|     |-----page.tsx
+|     |-----default.tsx
+|
+|-----layout.tsx
+|-----page.tsx
+|-----default.tsx
+```
+
+After creating the above like directory now try to reload after navigation to `/dashboard` then `/dashboard/archived` using `<Link>` component not directly using link in search bar.
+
+If you type the URL segment directly in the search bar which will cause the  page to load which will show the default pages for the rest of the `slots`.
+
+
+
+**layout.tsx inside dashboard**
+```js
+export default function DashboardLayout({
+    children, user, revenue, notifications
+}: {
+    children: React.ReactNode,
+    user: React.ReactNode,
+    revenue: React.ReactNode,
+    notifications: React.ReactNode,
+}) {
+    return (
+        <section>
+            <section>{children}</section>
+            <section className="flex gap-2">
+            <section className="flex flex-col gap-1">
+                <article className="min-w-[200px] min-h-[200px] border border-gray-400 rounded-md">{user}</article>
+                <article className="min-w-[200px] min-h-[200px] border border-gray-400 rounded-md">{revenue}</article>
+            </section>
+            <section>
+                <article className="min-w-[200px] min-h-[400px] border border-gray-400 rounded-md">{notifications}</article>
+            </section>
+        </section>
+        </section>
+    )
+}
+```
+
+layout.tsx file revieves all slots as a props inside dashboard folder.

@@ -7,7 +7,9 @@ export default function DashboardLayout({
     notifications: React.ReactNode,
 }) {
     return (
-        <section className="flex gap-2">
+        <section>
+            <section>{children}</section>
+            <section className="flex gap-2">
             <section className="flex flex-col gap-1">
                 <article className="min-w-[200px] min-h-[200px] border border-gray-400 rounded-md">{user}</article>
                 <article className="min-w-[200px] min-h-[200px] border border-gray-400 rounded-md">{revenue}</article>
@@ -15,6 +17,7 @@ export default function DashboardLayout({
             <section>
                 <article className="min-w-[200px] min-h-[400px] border border-gray-400 rounded-md">{notifications}</article>
             </section>
+        </section>
         </section>
     )
 }
