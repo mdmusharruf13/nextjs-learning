@@ -693,3 +693,42 @@ export default function GlobalError({error, reset} : {
   )
 }
 ```
+
+
+### Parallel routes
+
+Parallel routing is an advanced routing mechanism that lets us render multiple pages simultaneously within the same layout.
+
+How to setup:
+  - Parallel routes in Next.js are defined using a feature known as "slots".
+  - Slots helps organize content in modular way.
+  - To create slot we use the "@folder" naming convention.
+  - Each defined slot automatically becomes a prop in its corresponding `layout.tsx` file.
+
+Parallel route use cases:
+  - Dashboards with multiple sections.
+  - Split-view interface.
+  - Multi-pane layouts.
+  - Complex admin interface.
+
+Parallel routes benfits:
+  - Parallel routes are great for splitting a layout into managable slots (especially when different teams works on different parts).
+  - Independent route handling.
+    - Each slot in your layout, such as users, revenue, and notifications, can handle its own loading and error states.
+    - This granular control is particularly useful in scenarios where different sections of the page load at varying speeds or encounter unique errors.
+  - Sub-navigation
+    - Each slots can essentially function as a mini-application, complete with its own navigation and state management.
+    - Users can interact with each section seperately, applying filters, sorting data, or navigating through pages without affecting other parts.
+
+
+```js
+dashboard/
+|_____@notifications/
+|     |-----page.tsx
+|
+|_____@revenue/
+|     |-----page.tsx
+|
+|_____@users/
+|     |-----page.tsx
+```
