@@ -869,3 +869,136 @@ app/
 **Note : When your create intercepted route(creating folders using `(.)folderName`) you should restart the developement mode to see the working of intercepting routes, even if your try multiple times like creating intercepted routes you won't be able to see the working untill unless you restart developement mode.** 
 
 [see my codes inside intercepted folder](/src/app/concepts/intercepted/)
+
+
+### **Parallel Intercepted route (with mini project)**
+```js
+app/
+|_____feed/
+|     |-----layout.tsx
+|     |-----page.tsx
+|     |_____@model
+|     |     |-----page.tsx 
+|     |     |_____(..)photo 
+|     |     |     |_____[id]/             
+|     |     |     |     |-----page.tsx    
+|                                   
+|_____photo/
+|     |_____[id]/
+|     |     |-----page.tsx
+|
+|-----layout.tsx
+|-----page.tsx
+```
+
+###  feed's layout.tsx file (`/feed` route)
+```js
+import Link from "next/link"
+import { data } from "../data"
+
+const getDivStyles = (color: string) => {
+    const divStyles = {
+        color: `${color}`,
+        backgroundColor: 'azure',
+        minHeight: '200px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontWeight: 'bold'
+    }
+    return divStyles;
+}
+
+export default function FeedLayout({
+    children,
+    modal
+} : {
+    children: React.ReactNode
+    modal: React.ReactNode
+}) {
+    return (
+        <section>
+            <section>{children}</section>
+            <section className="grid lg:grid-cols-3 gap-8 md:grid-cols-2 sm:grid-cols-1">
+                {data.map((data => (
+                    <Link  href={`/concepts/parallel-intercepting/photo/${data.id}`} key={data.color}>
+                        <div style={getDivStyles(data.color)}>
+                            {data.text}
+                        </div>
+                    </Link>
+                )))}
+            </section>
+            <section>{modal}</section>
+        </section>
+    )
+}
+```
+
+### Intercepted route inside parallel route (`/feed/(..)photo/[id].tsx` route)
+```js
+"use client";
+
+import { data } from "@/app/concepts/parallel-intercepting/data";
+import { useRouter } from "next/navigation";
+import { use, useRef, useState } from "react";
+
+export default function PhotoId({params} : {
+    params: Promise<{id:number}>
+}) {
+
+    const {id} = use(params);
+    
+    const dataObj = data.find(obj => obj.id == id);
+
+    const modelRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+
+    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+        if(modelRef.current && !modelRef.current.contains(e.target as Node)) {
+            router.back();
+        } else {
+            window.location.reload();
+        }
+    }
+
+    return (
+        <section 
+            className="absolute top-0 left-0 min-w-screen min-h-screen backdrop-brightness-90 flex justify-center items-center backdrop" onClick={handleClick}
+        >
+            <div className="bg-white w-[400px] h-[400px] rounded-md flex justify-center items-center cursor-pointer" style={{
+                backgroundColor: `${dataObj?.color}`,
+                color: 'white',
+                fontWeight: 'bold'
+            }} ref={modelRef}>
+            <p>photo {dataObj?.text}</p>
+            </div>
+        </section>
+    )
+}
+```
+
+
+### Actual Dynamic Photo route (redirected to this route when refreshed intercepted route) `/feed/photo/[id]/page.tsx`
+```js
+import { data } from "../../data";
+
+export default async function PhotoId({params} : {
+    params: Promise<{id:number}>
+}) {
+
+    const {id} = await params;
+    const dataObj = data.find(obj => obj.id == id);
+
+    return (
+        <section className="flex justify-center items-center">
+            <section className="min-h-[50vh] min-w-1/2 flex justify-center items-center rounded-md text-2xl" style={{
+                backgroundColor: `${dataObj?.color}`,
+                color: 'white',
+                fontWeight: 'bold'
+            }}>
+                <p>{dataObj?.text}</p>
+            </section>
+        </section>
+    )
+}
+```

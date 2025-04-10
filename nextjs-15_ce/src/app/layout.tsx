@@ -30,8 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative flex flex-col justify-between min-h-screen`} 
       >
+        <section>
         <header style={{
           backgroundColor: 'lightblue',
           padding: "1rem"
@@ -43,9 +44,11 @@ export default function RootLayout({
         <ErrorWrapper>
         {children}
         </ErrorWrapper>
+        </section>
         <footer style={{
           backgroundColor: 'ghostwhite',
-          padding: "1rem"
+          padding: "1rem",
+          textAlign: "center"
         }}>
           <p>Footer</p>
         </footer>
