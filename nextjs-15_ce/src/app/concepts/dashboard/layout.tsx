@@ -1,12 +1,28 @@
+"use client";
+
+import { createContext, useState } from "react";
+
+interface AuthContextType {
+    isLoggedIn: boolean;
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const AuthContext = createContext<AuthContextType | null>(null);
+
 export default function DashboardLayout({
-    children, user, revenue, notifications
+    children, user, revenue, notifications, login
 }: {
     children: React.ReactNode,
     user: React.ReactNode,
     revenue: React.ReactNode,
     notifications: React.ReactNode,
+    login: React.ReactNode,
 }) {
-    return (
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+    return <>
+        <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn}}>
+        {isLoggedIn ? (
         <section>
             <section>{children}</section>
             <section className="flex gap-2">
@@ -19,5 +35,7 @@ export default function DashboardLayout({
             </section>
         </section>
         </section>
-    )
+    ) : <section>{login}</section>}
+        </AuthContext.Provider>
+    </>
 }

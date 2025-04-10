@@ -820,3 +820,14 @@ export default function DashboardLayout({
 ```
 
 layout.tsx file revieves all slots as a props inside dashboard folder.
+
+
+### Conditional routes
+
+Imagine you want to show different content based on whether a user is logged in or not.
+
+You might want to display a dashboard for authenticated users but show a login page for those who aren't.
+
+Conditional routes allows us to achieve this while maintaining completely separate code on the same URL.
+
+[conditional routes using **useContext**](/src/app/concepts/dashboard/layout.tsx)
