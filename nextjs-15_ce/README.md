@@ -831,3 +831,41 @@ You might want to display a dashboard for authenticated users but show a login p
 Conditional routes allows us to achieve this while maintaining completely separate code on the same URL.
 
 [conditional routes using **useContext**](/src/app/concepts/dashboard/layout.tsx)
+
+
+### Intercepting routes
+
+Intercepting routes is an advanced routing mechanism that allows you to load a route from another part of your application within the current layout.
+
+It's particularly useful when you want to display new content while keeping your user in the same context.
+
+Example: consider a photo gallery instead of jumping in to a dedicated photo page when someone clicks an image you can show a model with the enlarged photo in details like the photographers name and location the URL updates to match the specific photo making it sharable accessing that URL directly will show the photo's full page.
+
+Intercepting routes conventions
+  - (.) to match segments on the same level.
+  - (..) to match segments one level above.
+  - (..)(..) to match segments two level above.
+  - (...) to match segments from the root app directory.
+
+
+```js
+app/
+|_____feed/
+|     |-----layout.tsx
+|     |_____(..)photo --------------|
+|     |     |_____[id]/             |
+|     |           |-----page.tsx    |
+|                                   |
+|_____photo/  <---------------------V
+|     |_____[id]/
+|     |     |-----page.tsx
+|
+|-----layout.tsx
+|-----page.tsx
+```
+
+`/feed` route contains multiple images on clicking any image segment will change from `/feed` page to `/photo/imageid` page but the actual page showm is `/feed/(..)photo/imageid` page. On refresh of page then the actual page `/photo/imageid` page is shown.
+
+**Note : When your create intercepted route(creating folders using `(.)folderName`) you should restart the developement mode to see the working of intercepting routes, even if your try multiple times like creating intercepted routes you won't be able to see the working untill unless you restart developement mode.** 
+
+[see my codes inside intercepted folder](/src/app/concepts/intercepted/)
