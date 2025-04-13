@@ -1002,3 +1002,41 @@ export default async function PhotoId({params} : {
     )
 }
 ```
+
+
+### Route Handlers
+
+The app router lets you create custom request handlers for your routes using a feature called **Route Handlers**.
+
+Unlike page routes, which give HTML content, Route Handlers let us build RESTful endpoints with complete control over the response.
+
+Think of it like building a Node + Express app, but there's no need to setup and configure a seperate server.
+
+Route Handlers are great when making external API requests as well. For example, if you're building an app that needs to talk to third-party services.
+
+Route Handlers run server-side, our sensitive info like private keys stays secure and never reaches the browser.
+
+Route Handlers are the equivalent of API routes in Page router.
+
+Next.js supports GET, POST, PUT, PATCH, DELETE, HEAD and OPTIONS.
+
+If an unsupported method is called, Next.js will reture a 405 Method Not allowed response.
+
+**Note: If a directory has two files `page.tsx` and `route.ts` and the `route.ts` file take over the `page.tsx` file.**
+
+```js
+app/
+|_____products/
+|     |-----page.tsx   // it will be ignored
+|     |-----route.ts   // it will be considered
+
+// try this first and then see the output.
+```
+
+### Example for `/product` route
+
+```js
+export async function GET() {
+  return new Response("response from Product");
+}
+```
