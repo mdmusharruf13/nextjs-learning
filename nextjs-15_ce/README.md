@@ -1040,3 +1040,13 @@ export async function GET() {
   return new Response("response from Product");
 }
 ```
+
+
+### GET Request Route Handler
+```js
+import { comments } from "./data";
+
+export async function GET() {
+    return Response.json(comments);
+}
+```
