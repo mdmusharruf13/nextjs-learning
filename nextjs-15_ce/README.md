@@ -1097,3 +1097,22 @@ export async function GET(request: Request, {params}: { params: Promise<{id: str
     return Response.json(result);
 }
 ```
+
+
+### PATCH Request
+
+PATCH request let us make partical modification to a resource.
+
+```js
+export async function PATCH(request: Request, {params}: {params: Promise<{id: string}>}) {
+
+    const { id } = await params;
+    const body = await request.json();
+    const { comment } = body; 
+
+    const index = comments.findIndex(comment => comment.id == +id);
+    comments[index].comment = comment;
+
+    return Response.json(comments[index]);
+}
+```
