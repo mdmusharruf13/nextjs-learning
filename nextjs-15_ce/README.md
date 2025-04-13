@@ -1069,3 +1069,31 @@ export async function POST(response: Response) {
 ```
 
 send object with comment as property to body in POST request.
+
+### Dynamic Route Handler
+
+Dynamic route handler accepts two objects: request object and context object. Context object is the dynamic value wrapped in promise object.
+
+```js
+app/
+|_____api/
+|     |_____comments
+|     |     |-----data.ts
+|     |     |-----route.ts
+|     |     |_____[id]/           // dynamic route
+|     |     |     |-----route.ts
+
+
+route: `/api/comments/1`
+```
+
+```js
+import { comments } from "../data";
+
+export async function GET(request: Request, {params}: { params: Promise<{id: string}>}) {
+    const id = (await params).id;
+    const result = comments.find(comment => comment.id == +id);
+
+    return Response.json(result);
+}
+```
