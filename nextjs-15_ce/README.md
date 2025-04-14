@@ -1182,7 +1182,7 @@ export async function GET(request: NextRequest) {
     const headersList = await headers();
     console.log(headersList.get("Authorization"));
 
-    return new Response("Profile API data.");
+    return new Response("Profile API data. ");
 }
 ```
 [**see alternate way of accessing headers**](/src/app/api/profile/route.ts)
@@ -1205,6 +1205,43 @@ export async function GET(request: NextRequest) {
       headers: {
         "Content-Type": "text/html"
       }
+    });
+}
+```
+
+
+### Cookies in Route Handlers
+
+Cookies are small piece of data that a server sends to a user's web browser.
+
+The browser can store the cookies and send them back to the same server with future requests.
+
+Cookies serve 3 main purposes:
+
+  - Managing sessions (like user logins and shopping carts).
+  - Handling personalization (such as user preferences and themes).
+  - Tracking (like recording and analyzing user behaviour).
+
+```js
+import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
+
+export async function GET(request: NextRequest) {
+
+    // first approach
+    const theme = request.cookies.get("theme");
+    console.log(theme);
+    
+    // second approach
+    const cookieStore = await cookies();
+    cookieStore.set("resultPercentage", "70");
+    console.log(cookieStore.get("resultPercentage"));
+
+    return new Response("<h1>Profile API data.</h1>", {
+        headers: {
+            "Content-Type": "text/html",
+            "Set-Cookie": "theme=dark",
+        }
     });
 }
 ```
