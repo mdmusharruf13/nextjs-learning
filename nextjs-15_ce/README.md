@@ -1151,3 +1151,60 @@ export async function GET(request: NextRequest) {
 }
 ```
 Note: works if `request: NextRequest` type.
+
+
+### Headers in Route Handlers
+
+HTTP headers represent the metadata associated with an API request and response.
+
+**Request Headers**
+
+- These are sent by the client, such as web browser, to the server. They contain essential info about the request, which helps the server understand and process it correctly.
+
+- `User-Agent` which identifies the browser and operating system to the server.
+
+- `Accept` which indicates the content types like text, video, or image formats that the client can process.
+
+- `Authorization` header used by the client to authenticate itself to the server.
+
+**Response Headers**
+
+These are sent back from the server to the client. They provide info about the server and the data being sent in the response.
+
+- `Content-Type` header which indicates the media type of the response. It tells the client what the data type of the returned content is, such as text/html for HTML documents, application/json for the JSON data etc.
+
+### Headers from Client-side
+
+```js
+import { headers } from "next/headers";
+
+export async function GET(request: NextRequest) {
+    const headersList = await headers();
+    console.log(headersList.get("Authorization"));
+
+    return new Response("Profile API data.");
+}
+```
+[**see alternate way of accessing headers**](/src/app/api/profile/route.ts)
+
+
+Headers returned from the headers functions are readonly.
+
+To set new headers you will need to return new response with your custom headers.
+
+### Returning Headers from Server-side
+
+```js
+import { headers } from "next/headers";
+
+export async function GET(request: NextRequest) {
+    const headersList = await headers();
+    console.log(headersList.get("Authorization"));
+
+    return new Response("<h1>Profile API data.</h1>", {
+      headers: {
+        "Content-Type": "text/html"
+      }
+    });
+}
+```
