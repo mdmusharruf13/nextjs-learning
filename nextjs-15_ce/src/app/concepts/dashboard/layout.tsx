@@ -1,13 +1,7 @@
 "use client";
 
-import { createContext, useState } from "react";
-
-interface AuthContextType {
-    isLoggedIn: boolean;
-    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const AuthContext = createContext<AuthContextType | null>(null);
+import { useState } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function DashboardLayout({
     children, user, revenue, notifications, login

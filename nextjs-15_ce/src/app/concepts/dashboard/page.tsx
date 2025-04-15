@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { AuthContext } from "./layout";
+import { AuthContext } from "@/context/AuthContext"; 
 
 export default function DashboardPage() {
 

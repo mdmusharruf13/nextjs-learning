@@ -821,6 +821,15 @@ export default function DashboardLayout({
 
 layout.tsx file revieves all slots as a props inside dashboard folder.
 
+**Note:** 
+  - **Don't export custom vairables like `AuthContext` from layout files.**
+  - **Next.js layout files are supposed to only export special layout-related things, like:** 
+    - `generateMetadata`
+    - `metadata`
+    - `generateStaticParams`
+    - `revalidate`, etc.
+  - **When you export custom values like `AuthContext` from layout files, the Next.js compiler throws an error because it expects no extra exports outside the allowed ones.**
+
 
 ### Conditional routes
 
