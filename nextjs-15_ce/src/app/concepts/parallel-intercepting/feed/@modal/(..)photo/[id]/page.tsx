@@ -2,7 +2,7 @@
 
 import { data } from "@/app/concepts/parallel-intercepting/data";
 import { useRouter } from "next/navigation";
-import { use, useRef, useState } from "react";
+import { use, useRef } from "react";
 
 export default function PhotoId({params} : {
     params: Promise<{id:number}>

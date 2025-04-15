@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
     return Response.json(filteredComments);
 }
 
-export async function POST(response: Response) {
-    const res = await response.json();
+export async function POST(request: NextRequest) {
+    const res = await request.json();
 
     const newComments = {
         id: comments.length+1,

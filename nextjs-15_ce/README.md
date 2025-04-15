@@ -1053,10 +1053,11 @@ export async function GET() {
 
 ### POST Request Handler
 ```js
+import { NextRequest } from "next/server";
 import { comments } from "./data";
 
-export async function POST(response: Response) {
-    const res = await response.json();
+export async function POST(request: NextRequest) {
+    const res = await request.json();
 
     const newComments = {
         id: comments.length+1,

@@ -24,7 +24,7 @@ export default function ReviewPage({params}: {
 
             return () => clearTimeout(timer);
         }
-    },[]);
+    },[productId]);
 
     if(loading) {
         return <Loading />
