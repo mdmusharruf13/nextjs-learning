@@ -1245,3 +1245,43 @@ export async function GET(request: NextRequest) {
     });
 }
 ```
+
+
+### Redirecting
+
+```js
+import { redirect } from "next/navigation"
+
+export default function ArticlePage() {
+
+    redirect("/concepts/articles/breaking-news-598?lang=en");
+
+    return (
+        <div>welcome to Article page</div>
+    )
+}
+```
+
+When URL hit this page it will automatically redirect page to the URL passed into this `redirect()`
+
+
+### Caching
+
+Route handlers are not cached by default but you can opt into caching when using the GET method.
+
+Caching only works with GET method.
+
+Other HTTP methods like POST, PUT, or DELETE are never cached.
+
+If you're using dynamic function like headers() and cookies(), or working with the request object in you GET method, caching won't be applied.
+
+```js
+export const dynamic = "force-static"; // this will make the page static
+export const revalidate = 10; // after 10 seconds the new data is showed
+
+export async function GET() {
+  return Response.json({ time: new Date().toLocaleTimeString() });
+}
+```
+
+In developement mode the `force-static` does'nt work, you have to go to production mode to see the working of static page which reloads after 10 seconds.
