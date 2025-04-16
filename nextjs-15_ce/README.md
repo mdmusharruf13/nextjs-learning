@@ -1031,9 +1031,10 @@ Next.js supports GET, POST, PUT, PATCH, DELETE, HEAD and OPTIONS.
 
 If an unsupported method is called, Next.js will reture a 405 Method Not allowed response.
 
-**Note: If a directory has two files `page.tsx` and `route.ts` and the `route.ts` file take over the `page.tsx` file.**
+**Note: If a directory has two files `page.tsx` and `route.ts` and the `route.ts` file take over the `page.tsx` file. When you try to build your application you will get error `Error: you cannot use a file named 'route.ts' or 'route.js' in a route segment that also uses a file such as 'page.tsx'`**
 
 ```js
+// only works in developement mode
 app/
 |_____products/
 |     |-----page.tsx   // it will be ignored
@@ -1295,3 +1296,89 @@ export async function GET() {
 ```
 
 In developement mode the `force-static` does'nt work, you have to go to production mode to see the working of static page which reloads after 10 seconds.
+
+
+### Middleware
+
+Middleware in Next.js is a powerful feature that lets you intercept and control the flow requests and responses throughout your application.
+
+It does this at a global level, significantly enhancing features like redirects, URL rewrites, authentication, headers, cookies and more.
+
+Middleware runs before cached content and routes are matched.
+
+Middleware lets you specify paths where it should be active: 
+  - Custom matcher config ([see example](/src/middleware.ts))
+  - Conditional statements
+
+
+### Matcher in Middleware
+
+`matcher` allows you to fileter Middleware to run on specific paths.
+
+```js
+export const config = {
+  matcher: '/about',     // for single path
+}
+
+or 
+
+export const config = {
+  matcher: [            // for multiple path
+    "/about",
+    "/contact"
+  ]
+};
+```
+
+### Conditional statements Example
+
+```js
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+    if(request.nextUrl.pathname == "/concepts/docs") {
+        return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    return NextResponse.next();
+}
+```
+
+### Rewrite URL
+
+```js
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+  if(request.nextUrl.pathname == "/concepts/secret") {
+    return NextResponse.rewrite(new URL("/concepts/docs", request.url));
+  }
+
+  return NextResponse.next();
+}
+```
+
+Here the URL stays same but the page changes. If `/concepts/secret` is enter in the searchbar then the URL stays same but the page changes to `/concepts/docs`.
+
+
+### Cookies and Headers in Middleware
+
+```js
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+  const response = NextResponse.next();
+
+  const themePreference = request.cookies.get("theme");
+  if(!themePreference) {
+    response.cookies.set("theme", "dark");
+  }
+
+  NextResponse.headers.set("custom-header", "custom-value");
+
+  return response;
+}
+``` 
