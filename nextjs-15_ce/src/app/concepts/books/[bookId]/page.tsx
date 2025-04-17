@@ -1,3 +1,5 @@
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
     return [{bookId: "1"}, {bookId: "2"}, {bookId: "3"}];
 }

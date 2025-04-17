@@ -1877,3 +1877,43 @@ export async function generateStaticParams() {
   ];
 }
 ```
+
+### dynamicParams
+
+Control what happens when a dynamic segment is visited that was not generated with `generateStaticParams()`.
+
+**true** - Next.js will statically render pages on demand for any dynamic segments not included in `generateStaticParams()`.
+
+**false** - Next.js will return a 404 error for any dynamic segments not included in out pre-rendered list.
+
+```js
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+    return [{bookId: "1"}, {bookId: "2"}, {bookId: "3"}];
+}
+
+export default async function Book({params}: {params: Promise<{bookId: string}>}) {
+
+    const bookId = (await params).bookId;
+
+    return (
+        <>
+            <h1>Book {bookId}</h1>
+            <p>current time is {new Date().toLocaleTimeString()}</p>
+        </>
+    )
+}
+```
+
+### When to use what>
+
+**true:**
+  - If you're building an e-commerce site, you'll probably want to keep `dynamicParams` set to `true`.
+
+  - This way, you can pre-render your most popular product pages for better performance, but still allow access to all your other products - they'll just be rendered on demand.
+
+**false:**
+  - If you're working with something like a blog where you have a smaller, more fixed number of pages, you can pre-render all of them and set `dynamicParams` to `false`.
+
+  - If someone tries to access a blog post that doesn't exist, they'll get a clean 404 error instead of waiting for a page that will never exist.
