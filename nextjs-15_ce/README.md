@@ -1715,3 +1715,57 @@ export default function ClientPage() {
     )
 }
 ```
+
+
+### Server Rendering Strategies
+  - Static rendering
+  - Dynamic rendering
+  - Streaming
+
+
+### Static Rendering
+
+Static rendering is a server rendering starategy where we generate HTML pages when building our application.
+
+Think of it as preparing all your content in advance - before any user visits your site.
+
+Once built, these pages can be cached by CDNs and served instantly to users.
+
+With this approach, the same pre-rendered page can be shared among different users, giving your app a significant performance boost.
+
+Static rendering perfect for things like blog posts, e-commerce product listing, documentation, and marketing pages.
+
+
+### How to statically render?
+
+Static rendering is the default strategy in the app router.
+
+All routes are automatically prepared at build time without any additional setup.
+
+### Production server vs Dev server
+  - In production, we create on optimized build and deploy it - no on-the-fly changes after deployment.
+
+  - A developement server, on the other hand, focuses on the developer experience, we need to see our chages immediately in the browser without rebuilding the app every time.
+
+  - In production, pages are pre-rendered once during the build.
+
+  - In development, pages are pre-rendered on every request.
+
+### Prefetching
+
+  - Prefetching is a technique that preloads routes in the background as their links become visible.
+
+  - For static routes like ours, Next.js automatically prefetches and caches the whole route.
+
+  - When our home page loads, Next.js is already prefetching `about` and `dashboard` route for instant navigation.
+
+### Static rendering summary
+  - Static rendering is a strategy where the HTML is generated at build time.
+
+  - Along with the HTML, RSC payloads for components and JavaScript chunks for client-side hydration are created.
+
+  - Direct route visits serve HTML files.
+
+  - Client-side navigation uses RSC payloads and JavaScript chunks without additional server requests.
+
+  - Static rendering is great for performance, especially in blogs, documentation, and marketing pages.
