@@ -1684,3 +1684,34 @@ To create client components, add the `"use client"` directive at the top of the 
 Server Components are rendered exclusively on the server.
 
 Client Components are rendered once on the server and then on the client.
+
+**Server Component Example**
+```js
+export default function ServerPage() {
+    console.log("this is server component");
+
+    return (
+        <section>
+            <p>Date: {new Date().toLocaleDateString()}</p>
+        </section>
+    )
+}
+```
+
+**Client Component Example**
+```js
+"use client";
+
+import { useState } from 'react';
+
+export default function ClientPage() {
+    const [input, setInput] = useState("");
+
+    return (
+        <section>
+            <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
+            <p>Input is : {input}</p>
+        </section>
+    )
+}
+```
