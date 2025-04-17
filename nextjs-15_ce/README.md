@@ -1798,3 +1798,82 @@ You don't have to stress about choosing between static and dynamic rendering.
 Next.js automatically selects the optimal rendering strategy for each route based on the features and APIs you're using.
 
 If you want to force a route to be dynamically rendered, you can use the `export const dynamic ='force-dynamic'` config at the top of your page.
+
+
+### generateStaticParams()
+
+It is a function that
+  - works alongside dynamic route segments
+  - to generate static routes during build time
+  - instead of on demand at request time
+  - giving us a nice performance boost
+
+
+![static-dynamic-build-image](/public/dynamic-demo-1.png)
+
+![static-dynamic-diff-image](/public/static-dynamic.png)
+
+The `concept/books/page.tsx` do not have any dynamic data so it is served as static route.
+
+As the `/concepts/books/[bookId]/page.tsx` is dynamic route so it is build to server as a dynamic content.
+
+```js
+export default async function Book({params}: {params: Promise<{bookId: string}>}) {
+
+    const bookId = (await params).bookId;   // this is dynamic value
+
+    return (
+        <>
+            <h1>Book {bookId}</h1>
+            <p>current time is {new Date().toLocaleTimeString()}</p>  
+        </>
+    )
+}
+```
+
+The time `new Date().toLocaleTimeString()` in the above code will update on refresh or every render.
+
+### After using generateStaticParams()
+
+```js
+export async function generateStaticParams() {
+    return [{bookId: "1"}, {bookId: "2"}, {bookId: "3"}];
+}
+
+export default async function Book({params}: {params: Promise<{bookId: string}>}) {
+
+    const bookId = (await params).bookId;
+
+    return (
+        <>
+            <h1>Book {bookId}</h1>
+            <p>current time is {new Date().toLocaleTimeString()}</p>
+        </>
+    )
+}
+```
+
+The time `new Date().toLocaleTimeString()` in the above code will update only on URL segment change (i.e, dynamic value change) but not on refresh.
+
+Time is captured at the build time for the above 3 `bookId` dynamic values from the `generateStaticParams()`.
+
+See the below image, where time is same for the 3 routes highlighted in the image as those routes are static routes.
+
+![build-folders-after-using-generateStaticParams](/public/generate-static-params-1.png)
+
+![build-folders-after-using-generateStaticParams](/public/static-dynamic-build.png)
+
+### For Multiple dynamic route segments
+
+Suppose we have a product catalog with categories and products - `/products/[category]/[product]/page.tsx`.
+
+```js
+export async function generateStaticParams() {
+  return [
+    { category: 'electronics', product: 'smartphone' },
+    { category: 'electronics', product: 'laptop' },
+    { category: 'books', product: 'science-fiction' },
+    { category: 'books', product: 'biography' }
+  ];
+}
+```
