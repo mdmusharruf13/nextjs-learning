@@ -1917,3 +1917,37 @@ export default async function Book({params}: {params: Promise<{bookId: string}>}
   - If you're working with something like a blog where you have a smaller, more fixed number of pages, you can pre-render all of them and set `dynamicParams` to `false`.
 
   - If someone tries to access a blog post that doesn't exist, they'll get a clean 404 error instead of waiting for a page that will never exist.
+
+
+### Streaming
+
+Streaming is a strategy that allows for progressive UI rendering from the server.
+
+Work is broken down into smaller chunks and streamed to the client as soon as they're ready.
+
+This means users can see part of the page right away, without waiting for  everything to load.
+
+It's particularly powerful for improving initial page load times and handling UI elements that depends on slower data fetches, which would normally hold up the entire route.
+
+
+### Streaming strategy using `<Suspense>`
+
+```js
+import { Suspense } from "react";
+import Product from "./Product";
+import Reviews from "./Reviews";
+
+export default function StreamingPage() {
+    return (
+        <section>
+            <h1>Streaming page</h1>
+            <Suspense fallback={<p>Please wait product is loading...</p>}>
+                <Product />
+            </Suspense>
+            <Suspense fallback={<p>reviews are loading...</p>}>
+                <Reviews />
+            </Suspense>
+        </section>
+    )
+}
+```
