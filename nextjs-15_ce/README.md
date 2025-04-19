@@ -1951,3 +1951,33 @@ export default function StreamingPage() {
     )
 }
 ```
+
+
+### Server and Client Composition Patterns
+
+**Server Components**
+  - fetching data.
+  - accessing backend resources directly.
+  - keeping sensitive info (like access tokens and API keys) secure on the server.
+  - handling large dependencies server-side - which means less JavaScript for your user to download.
+
+**Client Components**
+  - adding interactivity.
+  - handling event listeners (like onClick(), onChange(), etc.).
+  - managing state and lifecycle effects (using hooks like useState(), useEffect(), etc.).
+  - working with browser-specific APIs.
+  - Implementing custom hooks.
+  - Using React class components.
+
+
+### Context Providers
+
+Context providers typically live near the root of an application to share global state and logic.
+
+For example, your application's theme.
+
+However, React context isn't supported in Server Components.
+
+If you try to create a context at your app's root, you'll run into an error.
+
+The solution is to create your context and render its provider inside a dedicated Client Component.
