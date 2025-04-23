@@ -1981,3 +1981,108 @@ However, React context isn't supported in Server Components.
 If you try to create a context at your app's root, you'll run into an error.
 
 The solution is to create your context and render its provider inside a dedicated Client Component.
+
+### Server-only code
+
+**server-only package:** Throws a build-time error if someone accidentally imports server code into a client component.  
+
+
+### Client-only code
+
+To prevent unintended server side usage of client side code, we can use a package called **client-only**
+
+
+**Note:**
+
+  - **Any component nested inside a client component automatically becomes a client component too, since client component renders after server component you can't import a server component directly into a client component**.
+
+  - **Instead of nesting server component pass it into a client component as a prop**. 
+
+
+### Data fetching in App Router
+
+The App router is build on React Server Component (RSC) architecture which gives us the flexibility to fetch data using either server component or client components.
+
+It's usually preferable to use server components for data operations because:
+  - You can directly communicate with your databases and file systems on the server side.
+
+  - You get better performancee since you're closer to your data source.
+
+  - Your client-side bundle stays lean because the heavy lifting happens server-side.
+
+  - Your sensitive operations and API keys remain secure on teh servers.
+
+### Client side Data fetching
+
+```js
+"use client";
+
+import { useEffect, useState } from "react";
+
+type User = {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    phone: string;
+}
+
+export default function UserClient() {
+    const [users, setUsers] = useState<User []>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+                if(!response.ok) throw new Error(`Failed to fetch users`);
+                const data = await response.json();
+                setUsers(data);
+            } catch(err) {
+                if(err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError(`An unknown error occurred`);
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchUsers();
+    }, []);
+
+    if(loading) return <section>Loading please wait...</section>
+
+    if(error) return <section>{error}</section>
+
+    return (
+        <>
+            <ul>
+                {users.map(user => (
+                    <li 
+                        key={user.id}
+                        className="p-4 bg-white shadow-md rounded-lg text-gray-700"
+                    >
+                        <p className="font-bold">{user.name}</p>
+                        <section>
+                            <p>Username: {user.username}</p>
+                            <p>Email: {user.email}</p>
+                            <p>Phone: {user.phone}</p>
+                        </section>
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
+
+}
+```
+
+### Fetching data with Server Components
+
+The RSC architecture supports `async` and `await` keywords in Server Components.
+
+This means we can write our data fetching code just like regular JavaScript, using async function coupled with the await keyword.
+
+[**see example**](/src/app/concepts/data-fetching/user-server/page.tsx)
