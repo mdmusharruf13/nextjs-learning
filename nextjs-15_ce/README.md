@@ -2086,3 +2086,88 @@ The RSC architecture supports `async` and `await` keywords in Server Components.
 This means we can write our data fetching code just like regular JavaScript, using async function coupled with the await keyword.
 
 [**see example**](/src/app/concepts/data-fetching/user-server/page.tsx)
+
+
+### Data Fetching Patterns
+
+**Sequential**: Request in a component tree are dependent on each other. This can lead to longer loading times.
+
+**Parallel** Request in a route are eagerly initiated and will load data at the same time. This reduces the totat time to load data.
+
+
+### Sequential Fetching
+
+```js
+import Author from "./Author";
+
+type Post = {
+    userId: number;
+    id: number;
+    title: string;
+    body: string;
+}
+
+export default async function ParallelFetching() {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts`);
+    let posts = await response.json();
+
+    posts = posts.filter((post: Post) => post.id < 10);
+
+    return (
+        <section>
+            <ul className="flex flex-col gap-3 mb-2 mt-2">
+                {posts.map((post: Post) => {
+                    return <li key={post.id} className="border border-black rounded-lg p-2 flex flex-col gap-3">
+                        <section>
+                        <p className="font-bold">{post.title}</p>
+                        <p>{post.body}</p>
+                        </section>
+                        <Author id={post.id} />
+                    </li>
+                })}
+            </ul>
+        </section>
+    )
+}
+```
+
+```js
+export default async function Author({id}: {id: number}) {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+    const user = await response.json();
+
+    return (
+        <p><b className="text-sm">{user.name}</b></p>
+    )
+}
+```
+
+### Parallel Fetching
+
+```js
+type UserPosts = {
+  id: string;
+  name: string;
+  title: string;
+  body: string;
+}
+
+async function getUserPosts(userId: string) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+  return response.json();
+}
+async function getUserAlbums(userId: string) {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/albums?userId=${userId}`);
+  return response.json();
+}
+
+export default async function UserProfile({ params }: { params: Promise<{id: string}>}) {
+  const { id } = await params;
+
+  const postsData = getUserPosts(id);
+  const albumsData = getUserAlbums(id);
+
+  const [posts, albums] = await Pomise.all([postsData, albumsData]);
+
+}
+```
