@@ -2240,6 +2240,87 @@ export default async function UserProfile({ params }: { params: Promise<{id: str
       </section>
     </section>
   )
+}
+```
 
+### Server Actions
+
+Server Actions are asynchronous functions that are executed on the server.
+
+They can be called in Server and Client Components to handle form submissions and data mutations in Next.js applications.
+
+You should use Server Actions when you:
+
+- need to perform secure database operations.
+- want to reduce API boilerplate code.
+- need progressive enhancement for forms.
+- want to optimize for performance.
+
+A Server Action can be defined with the React "**use server**" directive.
+
+you can place the directive:
+
+- at the top of an async function to mark the function as a Server Action, or
+- At the top of a seperate file to mark all exports of that file as Server Actions.
+
+**Note:** Server Actions must be async function.
+
+### Server Actions benfits:
+
+- **Simplified code:** They dramatically simplify your code as there is no need for seperate API routes or client-side state management for form data.
+
+- **Improved security:** They boost security by keeping sensitive operations server-side, away from potential threats.
+
+- **Better performance:** They improve performance because there's less JavaScript running on the client, leading to faster load times and better core web vitals.
+
+- **Progressive enhancement:** Forms keep working even if JavaScript is turned off in the browser - making your apps more accessible and resilent.
+
+### Insert into Database with Server Actions
+
+```js
+import { connectToDB } from "@/utils/mongodb";
+
+export default function AddProduct() {
+  const styles = {
+    input: {
+      border: "1px solid black",
+    },
+    button: {
+      border: "1px solid black",
+      padding: "4px",
+      cursor: "pointer",
+      borderRadius: "5px",
+    },
+  };
+
+  async function submitForm(formData: any) {
+    "use server";
+
+    const name = formData.get("name");
+    const password = formData.get("pswd");
+
+    const client = await connectToDB();
+    const db = client.db("practice");
+    const forms = db.collection("forms");
+    const result = await forms.insertOne({ name, password });
+
+    console.log(result);
+  }
+
+  return (
+    <form action={submitForm}>
+      <section>
+        <label htmlFor="name">Name: </label>
+        <input type="text" name="name" id="name" style={styles.input} />
+      </section>
+
+      <section>
+        <label htmlFor="pswd">Password: </label>
+        <input type="password" name="pswd" id="pswd" style={styles.input} />
+      </section>
+
+      <input type="submit" value="Submit" style={styles.button} />
+    </form>
+  );
 }
 ```
