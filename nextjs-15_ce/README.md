@@ -2324,3 +2324,40 @@ export default function AddProduct() {
   );
 }
 ```
+
+### useFormStatus
+
+`useFormStatus` is a React hook that gives us status information about the last form submission.
+
+```js
+const status = useFormStatus();
+```
+
+It returns an object containing 4 key properties:
+
+- **pending**: a boolean that indicates if the parent `<form>` is currently submitting.
+- **data**: an object containing the form's submission data.
+- **method**: a string (either `GET` or `POST`) showing the HTTP method being used.
+- **action**: a reference to the function that was passed to the parent `<form>'s` action prop.
+
+We'll use **"peinding"** to disable our submit button while the form is being procressed.
+
+```js
+"use client";
+
+import { useFormStatus } from "react-dom";
+
+export default function Submit() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className="text-white bg-blue-500 rounded disabled:bg-gray-500 p-2 cursor-pointer"
+      disabled={pending}
+    >
+      Submit
+    </button>
+  );
+}
+```

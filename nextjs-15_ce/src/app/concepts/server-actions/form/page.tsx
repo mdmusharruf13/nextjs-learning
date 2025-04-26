@@ -1,19 +1,14 @@
 import { connectToDB } from "@/utils/mongodb";
+import Submit from "@/components/Submit";
 
 export default function AddProduct() {
   const styles = {
     input: {
       border: "1px solid black",
     },
-    button: {
-      border: "1px solid black",
-      padding: "4px",
-      cursor: "pointer",
-      borderRadius: "5px",
-    },
   };
 
-  async function submitForm(formData: any) {
+  async function submitForm(formData: FormData) {
     "use server";
 
     const name = formData.get("name");
@@ -39,7 +34,7 @@ export default function AddProduct() {
         <input type="password" name="pswd" id="pswd" style={styles.input} />
       </section>
 
-      <input type="submit" value="Submit" style={styles.button} />
+      <Submit />
     </form>
   );
 }
