@@ -2361,3 +2361,102 @@ export default function Submit() {
   );
 }
 ```
+
+### Form validation with `useActionState`
+
+`useActionState` is a React hook that allows us to update state based on the result of a form state.
+
+It is particularly helpful for handling form validation and error messages.
+
+```js
+"use client";
+
+import { FormState, submitForm } from "@/actions/User";
+import { useActionState } from "react";
+
+export default function Form() {
+  const styles = {
+    input: {
+      border: "1px solid black",
+    },
+  };
+
+  const initialState: FormState = {
+    error: {},
+  };
+
+  const [state, formAction, isPending] = useActionState(
+    submitForm,
+    initialState
+  );
+
+  return (
+    <form action={formAction}>
+      <section>
+        <label htmlFor="name">Name: </label>
+        <input type="text" name="name" id="name" style={styles.input} />
+        {state?.error?.name && (
+          <p className="text-red-500">{state.error?.name}</p>
+        )}
+      </section>
+
+      <section>
+        <label htmlFor="pswd">Password: </label>
+        <input type="password" name="pswd" id="pswd" style={styles.input} />
+        {state?.error?.pswd && (
+          <p className="text-red-500">{state.error?.pswd}</p>
+        )}
+      </section>
+
+      <button
+        type="submit"
+        className="text-white bg-blue-500 rounded disabled:bg-gray-500 p-2 cursor-pointer"
+        disabled={isPending}
+      >
+        Submit
+      </button>
+    </form>
+  );
+}
+```
+
+Server Action
+
+```js
+"use server";
+
+import { connectToDB } from "@/utils/mongodb";
+
+type Error = {
+  name?: string,
+  pswd?: string,
+};
+
+export type FormState = {
+  error: Error,
+};
+
+export async function submitForm(
+  prevState: FormState | undefined,
+  formData: FormData
+) {
+  const name = formData.get("name");
+  const pswd = formData.get("pswd");
+
+  const error: Error = {};
+
+  if (!name) error.name = "name is required";
+  if (!pswd) error.pswd = "password is required";
+
+  if (Object.keys(error).length > 0) {
+    return { error };
+  }
+
+  const client = await connectToDB();
+  const db = client.db("practice");
+  const forms = db.collection("forms2");
+  const result = await forms.insertOne({ name, pswd });
+
+  console.log(result);
+}
+```
