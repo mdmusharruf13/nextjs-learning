@@ -2584,3 +2584,140 @@ export default function Form({ action }: { action: any }) {
   );
 }
 ```
+
+### Update Product using Server Actions
+
+```js
+export async function updateProducts(formData: FormData) {
+    try {
+        const client = await connectToDB();
+        const db = client.db("practice");
+        const products = db.collection("products");
+
+        const title = formData.get("title") as string;
+        const details = formData.get("details") as string;
+        const _id = formData.get("_id") as string;
+
+        if(!title || !details) {
+            throw new Error(`title or details missing ${JSON.stringify(formData)}`);
+        }
+        console.log(`title: ${title} details: ${details}`);
+
+        const isUpdated = await products.updateOne({_id: new ObjectId(_id)}, {$set: {title: title ,details: details}});
+
+        if(isUpdated.matchedCount == 0) {
+            console.log("no matching document found for title ", title);
+        } else if(isUpdated.modifiedCount == 0) {
+            console.log("Doc matched but no fields changed");
+        } else {
+            console.log("Doc successfully updated", isUpdated);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+    redirect("/concepts/server-actions/products");
+}
+```
+
+### Updated Form Page for both Adding and Updating Product
+
+```js
+"use client";
+
+import Submit from "@/components/Submit";
+
+const styles = {
+  input: {
+    border: "1px solid black",
+    padding: "1px 2px",
+    borderRadius: "3px",
+  },
+};
+
+export default function Form({
+  action,
+  formData,
+}: {
+  action: any,
+  formData?: any,
+}) {
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formObj = new FormData(event.currentTarget);
+    console.log(event.currentTarget);
+
+    if (formData) {
+      formObj.append("_id", formData._id);
+    }
+
+    await action(formObj);
+  };
+  return (
+    <form onSubmit={handleSubmitForm} className="flex flex-col gap-2 ">
+      <section className="flex gap-2">
+        <label htmlFor="title">Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          style={styles.input}
+          defaultValue={formData?.title}
+        />
+      </section>
+      <section className="flex gap-2">
+        <label htmlFor="details">Details</label>
+        <input
+          type="text"
+          name="details"
+          id="details"
+          style={styles.input}
+          defaultValue={formData?.details}
+        />
+      </section>
+      <section>
+        <Submit />
+      </section>
+    </form>
+  );
+}
+```
+
+### Products Route for displaying Products
+
+```js
+import { getProducts } from "@/actions/product";
+import Button from "@/components/Button";
+import Link from "next/link";
+
+export const fetchCache = "force-no-store";
+
+export default async function Products() {
+  const products = await getProducts();
+
+  return (
+    <section className="mt-4 flex flex-col">
+      <section>
+        <h1 className="text-2xl font-bold">products</h1>
+        <Link href={"/concepts/server-actions/products/add-products"}>
+          <Button>Add Products</Button>
+        </Link>
+      </section>
+      <section>
+        {products?.map((product: any) => (
+          <section key={product._id}>
+            <Link
+              href={`/concepts/server-actions/products/update-product/${product._id}`}
+            >
+              <h2>
+                <b>{product.title}</b>
+              </h2>
+            </Link>
+            <p>{product.details}</p>
+          </section>
+        ))}
+      </section>
+    </section>
+  );
+}
+```

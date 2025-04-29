@@ -10,16 +10,46 @@ const styles = {
   },
 };
 
-export default function Form({ action }: { action: any }) {
+export default function Form({
+  action,
+  formData,
+}: {
+  action: any;
+  formData?: any;
+}) {
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formObj = new FormData(event.currentTarget);
+    console.log(event.currentTarget);
+
+    if (formData) {
+      formObj.append("_id", formData._id);
+    }
+
+    await action(formObj);
+  };
   return (
-    <form action={action} className="flex flex-col gap-2 ">
+    <form onSubmit={handleSubmitForm} className="flex flex-col gap-2 ">
       <section className="flex gap-2">
         <label htmlFor="title">Title</label>
-        <input type="text" name="title" id="title" style={styles.input} />
+        <input
+          type="text"
+          name="title"
+          id="title"
+          style={styles.input}
+          defaultValue={formData?.title}
+        />
       </section>
       <section className="flex gap-2">
         <label htmlFor="details">Details</label>
-        <input type="text" name="details" id="details" style={styles.input} />
+        <input
+          type="text"
+          name="details"
+          id="details"
+          style={styles.input}
+          defaultValue={formData?.details}
+        />
       </section>
       <section>
         <Submit />
