@@ -2686,26 +2686,54 @@ export default function Form({
 ### Products Route for displaying Products
 
 ```js
-import { getProducts } from "@/actions/product";
+"use client";
+
+import { deleteProduct, getProducts } from "@/actions/product";
 import Button from "@/components/Button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export const fetchCache = "force-no-store";
 
-export default async function Products() {
-  const products = await getProducts();
+type Product = {
+  _id: string;
+  title: string;
+  details: string;
+};
+
+export default function Products() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productLength, setProductLength] = useState(0);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const productList = await getProducts();
+      setProducts(productList);
+      setProductLength(productList.length);
+    };
+    fetchProducts();
+  }, [productLength]);
+
+  function handleDelete(id: string) {
+    deleteProduct(id);
+    setProductLength((prev) => prev - 1);
+  }
+
+  if (products.length == 0) {
+    return <section>Loading Products please wait...</section>;
+  }
 
   return (
-    <section className="mt-4 flex flex-col">
+    <section className="mt-4 flex flex-col gap-4">
       <section>
         <h1 className="text-2xl font-bold">products</h1>
-        <Link href={"/concepts/server-actions/products/add-products"}>
+        <Link href={"/concepts/server-actions/products/add-product"}>
           <Button>Add Products</Button>
         </Link>
       </section>
-      <section>
+      <section className="flex flex-col gap-3">
         {products?.map((product: any) => (
-          <section key={product._id}>
+          <section key={product._id} className="flex flex-col gap-2">
             <Link
               href={`/concepts/server-actions/products/update-product/${product._id}`}
             >
@@ -2714,10 +2742,30 @@ export default async function Products() {
               </h2>
             </Link>
             <p>{product.details}</p>
+            <section>
+              <Button onClick={() => handleDelete(product._id)}>Delete</Button>
+            </section>
           </section>
         ))}
       </section>
     </section>
   );
+}
+```
+
+### Delete product Server Action
+
+```js
+export async function deleteProduct(id: string) {
+  try {
+    const client = await connectToDB();
+    const db = client.db("practice");
+    const product = db.collection("products");
+
+    const isDeleted = await product.deleteOne({ _id: new ObjectId(id) });
+    console.log(isDeleted.acknowledged, isDeleted.deletedCount);
+  } catch (err) {
+    console.log(err);
+  }
 }
 ```

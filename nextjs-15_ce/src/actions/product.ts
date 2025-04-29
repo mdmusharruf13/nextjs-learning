@@ -4,6 +4,12 @@ import { connectToDB } from "@/utils/mongodb";
 import { ObjectId } from "mongodb";
 import { redirect } from "next/navigation";
 
+type Product = {
+    _id: string;
+    title: string;
+    details: string;
+}
+
 export async function addProduct(formData: FormData) {
     try {
         const client = await connectToDB();
@@ -23,7 +29,7 @@ export async function addProduct(formData: FormData) {
     redirect("/concepts/server-actions/products");
 }
 
-export async function getProducts() {
+export async function getProducts(): Promise<Product[]> {
     try {
         const client = await connectToDB();
         const db = client.db("practice");
@@ -33,9 +39,10 @@ export async function getProducts() {
 
         return productList.map(product=> (
             {...product, _id: product._id.toString()}
-        ));
+        )) as Product[];
     } catch(err) {
         console.log(err);
+        return [];
     }
 }
 
@@ -67,4 +74,17 @@ export async function updateProducts(formData: FormData) {
         console.log(err);
     }
     redirect("/concepts/server-actions/products");
+}
+
+export async function deleteProduct(id: string) {
+    try {
+        const client = await connectToDB();
+        const db = client.db("practice");
+        const product = db.collection("products");
+
+        const isDeleted = await product.deleteOne({_id: new ObjectId(id)});
+        console.log(isDeleted.acknowledged, isDeleted.deletedCount);
+    } catch (err) {
+        console.log(err);
+    }
 }
