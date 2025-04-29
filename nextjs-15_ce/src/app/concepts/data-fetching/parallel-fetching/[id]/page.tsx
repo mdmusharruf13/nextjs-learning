@@ -45,7 +45,10 @@ export default async function UserProfile({
         <h2>Posts</h2>
         <section className="flex flex-col gap-2">
           {posts.map((post: Posts) => (
-            <section className="border border-black p-2 rounded-md">
+            <section
+              key={post.title}
+              className="border border-black p-2 rounded-md"
+            >
               <b>{post.title}</b>
               <p>{post.body}</p>
             </section>
@@ -56,7 +59,9 @@ export default async function UserProfile({
         <h2>Albums</h2>
         <section className="flex flex-col gap-2">
           {albums.map((album: Album) => (
-            <p className="border border-black p-2 rounded-md">{album.title}</p>
+            <p key={album.title} className="border border-black p-2 rounded-md">
+              {album.title}
+            </p>
           ))}
         </section>
       </section>

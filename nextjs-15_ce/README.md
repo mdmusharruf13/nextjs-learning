@@ -2460,3 +2460,127 @@ export async function submitForm(
   console.log(result);
 }
 ```
+
+### Pending (useFormStatus) **vs** isPending (useActionState)
+
+Both can help us determine if a form is being submitted and let us disable the submit button - but there's an interesting difference between them.
+
+The `pending` state from `useFormStatus` is specifically for form submission.-
+
+`isPending` and `useActionState` can be used with any Action, not just form submission.
+
+Go with `pending` form `useFormStatus` when you're building reusable components that are meant to live inside form. For example, submit buttons or loading spinners that you'll want to use across different forms in your application.
+
+Choose `isPending` from `useActionState` when you need to keep track of server actions that aren't necessarily related to form submissions. It gives you that extra flexibility.
+
+### Warning
+
+```js
+"use client";
+
+import { redirect } from "next/navigation";
+import { useFormStatus } from "react-dom";
+
+export default function Submit({ redirectPath }: { redirectPath: string }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className="text-white bg-blue-500 rounded disabled:bg-gray-500 p-2 cursor-pointer"
+      disabled={pending}
+      onClick={() => redirect && redirect(redirectPath)}
+    >
+      Submit
+    </button>
+  );
+}
+```
+
+- `onClick={() => redirect && redirect(redirectPath)}`
+
+  - This immediately triggers `redirect()` on click, before form submission even happens.
+
+- So the FormData never reaches your action function (updateProducts).
+
+- `redirect()` is a **server-side function**, NOT a client-side function.
+
+  - You cannot call `redirect()` inside "use client" components like buttons.
+
+### Server Action for Adding Products and Displaying
+
+```js
+"use server";
+
+import { connectToDB } from "@/utils/mongodb";
+import { redirect } from "next/navigation";
+
+export async function addProduct(formData: FormData) {
+  try {
+    const client = await connectToDB();
+    const db = client.db("practice");
+    const products = db.collection("products");
+
+    const title = formData.get("title");
+    const details = formData.get("details");
+
+    const isAdded = await products.insertOne({ title, details });
+    console.log(isAdded);
+    console.log(title, details);
+  } catch (err) {
+    console.log(err);
+  }
+  redirect("/concepts/server-actions/products");
+}
+
+export async function getProducts() {
+  try {
+    const client = await connectToDB();
+    const db = client.db("practice");
+    const products = db.collection("products");
+
+    const productList = await products.find({}).toArray();
+
+    return productList.map((product) => ({
+      ...product,
+      _id: product._id.toString(),
+    }));
+  } catch (err) {
+    console.log(err);
+  }
+}
+```
+
+### Form for Adding Product
+
+```js
+"use client";
+
+import Submit from "@/components/Submit";
+
+const styles = {
+  input: {
+    border: "1px solid black",
+    padding: "1px 2px",
+    borderRadius: "3px",
+  },
+};
+
+export default function Form({ action }: { action: any }) {
+  return (
+    <form action={action} className="flex flex-col gap-2 ">
+      <section className="flex gap-2">
+        <label htmlFor="title">Title</label>
+        <input type="text" name="title" id="title" style={styles.input} />
+      </section>
+      <section className="flex gap-2">
+        <label htmlFor="details">Details</label>
+        <input type="text" name="details" id="details" style={styles.input} />
+      </section>
+      <section>
+        <Submit />
+      </section>
+    </form>
+  );
+}
+```
