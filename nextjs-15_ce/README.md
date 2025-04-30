@@ -2769,3 +2769,156 @@ export async function deleteProduct(id: string) {
   }
 }
 ```
+
+### useOptimistic Hook
+
+`useOptimistic` is a React Hoook that provides a way to optimistically update the UI while an asynchronously action is underway.
+
+This technique helps make our apps feel more responsive, espically when working with forms.
+
+Instead of making users wait for server responses, we can show them the expected result right away.
+
+Server Component fetching products and passing to client for Displaying
+
+```js
+import { getProducts } from "@/actions/product";
+import Products from "./Products";
+import Link from "next/link";
+import Button from "@/components/Button";
+
+export const fetchCache = "force-no-store";
+
+export type Product = {
+  _id: string,
+  title: string,
+  details: string,
+};
+
+export default async function ProductsList() {
+  const products: Product[] = await getProducts();
+  console.log("sever - product list-: ", products);
+
+  return (
+    <section className="mt-4 flex flex-col gap-4">
+      <section>
+        <h1 className="text-2xl font-bold">products</h1>
+        <Link href={"/concepts/server-actions/products/add-product"}>
+          <Button>Add Products</Button>
+        </Link>
+      </section>
+      <Products products={products} />
+    </section>
+  );
+}
+```
+
+Client Component that displays products
+
+```js
+"use client";
+
+import { deleteProduct } from "@/actions/product";
+import { startTransition, useOptimistic, useState } from "react";
+import { Product } from "./page";
+import Link from "next/link";
+import Button from "@/components/Button";
+
+export default function Products({ products }: { products: Product[] }) {
+  const [optimisticProducts, setOptimisticProducts] = useOptimistic(
+    products,
+    (currentProducts, productId: string) => {
+      return currentProducts.filter((product) => product._id !== productId);
+    }
+  );
+
+  function handleDelete(id: string) {
+    setOptimisticProducts(id);
+    deleteProduct(id);
+  }
+
+  return (
+    <section className="flex flex-col gap-3">
+      {optimisticProducts?.map((product: any) => (
+        <section key={product._id} className="flex flex-col gap-2">
+          <Link
+            href={`/concepts/server-actions/products/update-product/${product._id}`}
+          >
+            <h2>
+              <b>{product.title}</b>
+            </h2>
+          </Link>
+          <p>{product.details}</p>
+          <section>
+            <Button onClick={() => handleDelete(product._id)}>Delete</Button>
+          </section>
+        </section>
+      ))}
+    </section>
+  );
+}
+```
+
+**Error**
+**An optimistic state update occurred outside a transition or action. To fix, move the update to an action, or wrap with startTransition.**
+
+...means you're calling `setOptimisticProducts()` **synchronously** during an event (like a button click) **outside a transition**, which Next.js/React 18+ requires to be inside a `startTransition` or a server action.
+
+### Wrap the optimistic update in `startTransition`
+
+```js
+import { startTransition } from "react";
+```
+
+Then, in your `handledelete` function:
+
+```js
+function handleDelete(id: string) {
+  startTransition(() => {
+    setOptimisticProducts(id); // trigger the optimistic update
+  });
+  deleteProduct(id); // server action
+}
+```
+
+### Why this is needed?
+
+React uses `startTransition` to prioritize the **user interface update** while deferring the **non-urgent logic** like state updates. `useOptimistic` relies on this mechanism to avoid warnings or incorrect UI behaviour.
+
+### More about `useOptimistic` hook
+
+the value passed to `useOptimistic(products, updater)` is `products` which is **prop from a server component** and never changes - meaning:
+
+- On **every re-render**, `useOptimistic` resets to the original `products` list.
+- Optimistic state works briefly - but it's lost on re-render (which happens right after `startTransition`).
+  So `useOptimistic` appears to "not work", when in fact it's being **overwritten immediately by the same base state** again.
+
+### Best Solution: **Use a local state as the true source of state**
+
+Wrap `products` in a `useState` - then make `useOptimistic` use **that state** instead of server-passed one.
+
+Correct code
+
+```js
+export default function Products({ products }: { products: Product[] }) {
+  const [localProducts, setLocalProducts] = useState(products);
+
+  const [optimisticProducts, setOptimisticProducts] = useOptimistic(
+    localProducts,
+    (currentProducts, productId: string) => {
+      return currentProducts.filter((product) => product._id !== productId);
+    }
+  );
+
+  function handleDelete(id: string) {
+    startTransition(() => {
+      setOptimisticProducts(id);
+    });
+
+    deleteProduct(id).then(() => {
+      setLocalProducts((prev) => prev.filter(p => p._id !== id)); // sync state
+    });
+  }
+
+  return (...);
+}
+```
