@@ -14,8 +14,12 @@ export default function Form({
   action,
   formData,
 }: {
-  action: any;
-  formData?: any;
+  action: (formData: FormData) => void;
+  formData?: {
+    _id?: string;
+    title: string;
+    details: string;
+  };
 }) {
   const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,11 +27,11 @@ export default function Form({
     const formObj = new FormData(event.currentTarget);
     console.log(event.currentTarget);
 
-    if (formData) {
+    if (formData?._id) {
       formObj.append("_id", formData._id);
     }
 
-    await action(formObj);
+    action(formObj);
   };
   return (
     <form onSubmit={handleSubmitForm} className="flex flex-col gap-2 ">

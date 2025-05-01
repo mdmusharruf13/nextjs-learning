@@ -27,7 +27,7 @@ export default function Products({ products }: { products: Product[] }) {
 
   return (
     <section className="flex flex-col gap-3">
-      {optimisticProducts?.map((product: any) => (
+      {optimisticProducts?.map((product: Product) => (
         <section key={product._id} className="flex flex-col gap-2">
           <Link
             href={`/concepts/server-actions/products/update-product/${product._id}`}
